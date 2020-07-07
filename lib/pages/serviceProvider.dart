@@ -9,6 +9,8 @@ class ServiceProviderPage extends StatefulWidget {
 }
 
 class _ServiceProviderPageState extends State<ServiceProviderPage> {
+  String dropdownValue;
+  List<String> orders = ["1", "2", "3", "4"];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -41,10 +43,44 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                         width: width * 0.9,
                         height: height * 0.6,
                         alignment: Alignment.center,
-                        child: Text(
-                          "Please Select the Order Number",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 40 * screenRadio),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Please Select the Order Number",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40 * screenRadio),
+                            ),
+                            DropdownButton<String>(
+                              iconEnabledColor: Colors.white,
+                              dropdownColor: Colors.blueGrey[700],
+                              value: dropdownValue,
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValue = newValue;
+                                });
+                              },
+                              underline: Container(),
+                              elevation: 16,
+                              items: orders.map<DropdownMenuItem<String>>(
+                                  (String order) {
+                                return DropdownMenuItem<String>(
+                                  value: order,
+                                  child: Container(
+                                    width: width * 0.1,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      order,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20 * screenRadio),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
                       ),
                     ),

@@ -1,5 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 import 'chart.dart';
 import 'serviceProvider.dart';
@@ -11,16 +13,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // VideoPlayerController _controller;
-  // @override
-  // void initState() {
-  //   _controller = VideoPlayerController.network(
-  //       "http://dsm.retail-sys.com/Uploads/Medias/Applepromovideo-iPhone5cRetailStoreLaunch(2013)-YouTube(720p).mp4")
-  //     ..initialize().then((_) {
-  //       setState(() {});
-  //     });
-  //   super.initState();
-  // }
+  VideoPlayerController _videoPlayerController;
+  ChewieController _chewieController;
+  Chewie playerWidget;
+  void initState() {
+    _videoPlayerController = VideoPlayerController.network(
+        'http://dsm.retail-sys.com/Uploads/Medias/Applepromovideo-iPhone5cRetailStoreLaunch(2013)-YouTube(720p).mp4');
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      aspectRatio: 16.0 / 9.0,
+      autoPlay: true,
+      looping: true,
+    );
+    playerWidget = Chewie(
+      controller: _chewieController,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +61,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 width: width * 0.45,
                 height: height * 0.9,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
-                // child: _controller.value.initialized
-                //     ? AspectRatio(
-                //         aspectRatio: _controller.value.aspectRatio,
-                //         child: VideoPlayer(_controller),
-                //       )
-                //     : Container(),
+                child: playerWidget,
               ),
 
               Container(

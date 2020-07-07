@@ -33,7 +33,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                   children: [
                     TableRow(children: [
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5 * screenRadio),
                         alignment: Alignment.center,
                         color: Colors.pink[200],
                         child: Text(
@@ -43,7 +43,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5 * screenRadio),
                         alignment: Alignment.center,
                         color: Colors.lightBlue,
                         child: Text(
@@ -53,7 +53,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5 * screenRadio),
                         alignment: Alignment.center,
                         color: Colors.pink[200],
                         child: Text(
@@ -65,7 +65,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                     ]),
                     TableRow(children: [
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5 * screenRadio),
                         alignment: Alignment.center,
                         child: Text(
                           "T-shirt",
@@ -74,7 +74,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5 * screenRadio),
                         alignment: Alignment.center,
                         child: Text(
                           "2",
@@ -83,7 +83,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5 * screenRadio),
                         alignment: Alignment.center,
                         child: Text(
                           "Washing",

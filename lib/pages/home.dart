@@ -1,9 +1,8 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'chart.dart';
+import '../charts/stockPieChart.dart';
 import 'serviceProvider.dart';
 import 'staff.dart';
 
@@ -13,9 +12,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //video
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
   Chewie playerWidget;
+
   void initState() {
     _videoPlayerController = VideoPlayerController.network(
         'http://dsm.retail-sys.com/Uploads/Medias/Applepromovideo-iPhone5cRetailStoreLaunch(2013)-YouTube(720p).mp4');
@@ -44,6 +45,48 @@ class _HomePageState extends State<HomePage> {
     double width = MediaQuery.of(context).size.width;
 
     double screenRadio = width / 961.5;
+
+    //order table row
+    TableRow _tableRowBuilder(
+        String orderNo, String ltime, String rtime, String statues) {
+      return TableRow(
+        children: [
+          Container(
+            padding: EdgeInsets.all(5 * screenRadio),
+            alignment: Alignment.center,
+            child: Text(
+              orderNo,
+              style: TextStyle(color: Colors.white, fontSize: 10 * screenRadio),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5 * screenRadio),
+            alignment: Alignment.center,
+            child: Text(
+              ltime,
+              style: TextStyle(color: Colors.white, fontSize: 10 * screenRadio),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5 * screenRadio),
+            alignment: Alignment.center,
+            child: Text(
+              rtime,
+              style: TextStyle(color: Colors.white, fontSize: 10 * screenRadio),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5 * screenRadio),
+            alignment: Alignment.center,
+            child: Text(
+              statues,
+              style: TextStyle(color: Colors.white, fontSize: 10 * screenRadio),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -76,15 +119,112 @@ class _HomePageState extends State<HomePage> {
                       height: height * 0.45,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
+                        color: Colors.lightBlue,
                       ),
-                      padding: EdgeInsets.all(10),
-                      child: charts.BarChart(
-                        _getWeeklyRecordsData(),
-                        animate: true,
-                        domainAxis: charts.OrdinalAxisSpec(
-                            renderSpec: charts.SmallTickRendererSpec(
-                                labelRotation: 60)),
+                      padding: EdgeInsets.all(width * 0.01),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: width * 0.43,
+                            height: height * 0.15,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(10 * screenRadio),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  width: width * 0.08,
+                                  child: drawPieChart(
+                                      "T-shirt Stock", tShirtStock),
+                                ),
+                                Container(
+                                  width: width * 0.08,
+                                  child:
+                                      drawPieChart("Trousers", trousersStock),
+                                ),
+                                Container(
+                                  width: width * 0.08,
+                                  child: drawPieChart("Jacket", jacketStock),
+                                ),
+                                Container(
+                                  width: width * 0.08,
+                                  child: drawPieChart(
+                                      "Accessories", accessoriesStock),
+                                ),
+                                Container(
+                                  width: width * 0.08,
+                                  child:
+                                      drawPieChart("Total Stock", totalStock),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: width * 0.43,
+                            height: height * 0.25,
+                            child: Table(
+                              border: TableBorder.all(color: Colors.white),
+                              children: [
+                                TableRow(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      color: Colors.pink[200],
+                                      child: Text(
+                                        "Order No.",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10 * screenRadio),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      child: Text(
+                                        "Leave Time",
+                                        style: TextStyle(
+                                            color: Colors.lightBlue,
+                                            fontSize: 10 * screenRadio),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      color: Colors.pink[200],
+                                      child: Text(
+                                        "Return Time",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10 * screenRadio),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      child: Text(
+                                        "Status",
+                                        style: TextStyle(
+                                            color: Colors.lightBlue,
+                                            fontSize: 10 * screenRadio),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _tableRowBuilder("1", "05/07/2020, 10:20",
+                                    "06/07/2020, 15:30", "Finish"),
+                                _tableRowBuilder("2", "06/07/2020, 11:10", "-",
+                                    "In Progress"),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Container(
@@ -135,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                             height: height * 0.4,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.lightBlue,
+                              color: Colors.pink[200],
                             ),
                             child: FlatButton(
                               child: Container(
@@ -180,22 +320,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _controller.dispose();
-  // }
-}
-
-_getWeeklyRecordsData() {
-  List<charts.Series<WeeklyRecords, String>> weeklyRecords = [
-    charts.Series(
-      id: "Counts",
-      data: data,
-      domainFn: (WeeklyRecords weeklyRecords, _) => weeklyRecords.day,
-      measureFn: (WeeklyRecords weeklyRecords, _) => weeklyRecords.counts,
-    )
-  ];
-  return weeklyRecords;
 }

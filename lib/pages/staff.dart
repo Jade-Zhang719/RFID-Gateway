@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:rfidgateway/pages/clothEnquiry.dart';
 
 class StaffPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class _StaffPageState extends State<StaffPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
+    dismissAllToast();
     super.initState();
   }
 
@@ -37,7 +39,7 @@ class _StaffPageState extends State<StaffPage> {
                   DottedBorder(
                     color: Theme.of(context).primaryColor,
                     borderType: BorderType.RRect,
-                    radius: Radius.circular(12),
+                    radius: Radius.circular(10),
                     child: Container(
                       width: width * 0.9,
                       height: height * 0.6,
@@ -95,6 +97,7 @@ class _StaffPageState extends State<StaffPage> {
                 color: Colors.transparent,
                 child: Icon(
                   Icons.arrow_back,
+                  size: 40 * screenRadio,
                   color: Theme.of(context).primaryColor,
                 ),
               ),

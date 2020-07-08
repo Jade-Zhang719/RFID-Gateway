@@ -2,6 +2,7 @@ import 'package:chewie/chewie.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rfidgateway/src/event.dart';
 import 'package:video_player/video_player.dart';
 
 import 'dayPicker.dart' as dp;
@@ -62,10 +63,10 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           children: [
             Container(
-              width: 60 * screenRadio,
-              height: 60 * screenRadio,
+              width: 65 * screenRadio,
+              height: 65 * screenRadio,
               alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 10 * screenRadio),
+              margin: EdgeInsets.all(10 * screenRadio),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).primaryColor,
@@ -136,13 +137,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Container(
                       width: width * 0.43,
-                      height: height * 0.4 - width * 0.02,
+                      height: height * 0.4 - 20 * screenRadio,
                       padding: EdgeInsets.only(top: height * 0.01),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                       ),
                       child: dp.CustomDayPicker(
+                        events: events,
                         width: width * 0.38,
                         height: height * 0.38,
                         onDateChange: (v) {
@@ -165,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Container(
                     width: width * 0.45,
-                    height: height * 0.45,
+                    height: height * 0.55,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -182,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Container(
                                 width: width * 0.2,
-                                height: height * 0.13,
+                                height: height * 0.16,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -191,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 width: width * 0.2,
-                                height: height * 0.13,
+                                height: height * 0.16,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -201,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 width: width * 0.2,
-                                height: height * 0.13,
+                                height: height * 0.16,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -210,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 width: width * 0.2,
-                                height: height * 0.13,
+                                height: height * 0.16,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -222,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: width * 0.02),
+                          margin: EdgeInsets.only(top: height * 0.05),
                           alignment: Alignment.center,
                           child: Table(
                             children: [
@@ -305,7 +307,8 @@ class _HomePageState extends State<HomePage> {
                         //staff page
                         Container(
                           width: width * 0.21,
-                          height: height * 0.4,
+                          height: height * 0.3,
+                          padding: EdgeInsets.all(10 * screenRadio),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).primaryColor,
@@ -318,13 +321,13 @@ class _HomePageState extends State<HomePage> {
                                   Icon(
                                     Icons.people,
                                     color: Colors.white,
-                                    size: 80,
+                                    size: 60 * screenRadio,
                                   ),
                                   Text(
                                     "Staff",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 40 * screenRadio),
+                                        fontSize: 30 * screenRadio),
                                   ),
                                 ],
                               ),
@@ -343,7 +346,8 @@ class _HomePageState extends State<HomePage> {
                         //service provider page
                         Container(
                           width: width * 0.21,
-                          height: height * 0.4,
+                          height: height * 0.3,
+                          padding: EdgeInsets.all(10 * screenRadio),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).primaryColor,
@@ -356,14 +360,14 @@ class _HomePageState extends State<HomePage> {
                                   Icon(
                                     Icons.widgets,
                                     color: Colors.white,
-                                    size: 80,
+                                    size: 60 * screenRadio,
                                   ),
                                   Text(
-                                    "Service Provider",
+                                    "Service\nProvider",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 25 * screenRadio),
+                                        fontSize: 18 * screenRadio),
                                   ),
                                 ],
                               ),
@@ -392,3 +396,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+final List<Event> events = [
+  Event(DateTime.now(), "Today event"),
+  Event(DateTime.now().subtract(Duration(days: 3)), "Ev1"),
+  Event(DateTime.now().subtract(Duration(days: 13)), "Ev2"),
+  Event(DateTime.now().subtract(Duration(days: 30)), "Ev3"),
+  Event(DateTime.now().add(Duration(days: 3)), "Ev4"),
+  Event(DateTime.now().add(Duration(days: 13)), "Ev5"),
+  Event(DateTime.now().add(Duration(days: 30)), "Ev6"),
+];

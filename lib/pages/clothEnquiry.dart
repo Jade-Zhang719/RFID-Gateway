@@ -112,6 +112,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                 color: Colors.transparent,
                 child: Icon(
                   Icons.arrow_back,
+                  size: 40 * screenRadio,
                   color: Theme.of(context).primaryColor,
                 ),
               ),

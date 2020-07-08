@@ -282,6 +282,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                 color: Colors.transparent,
                 child: Icon(
                   Icons.arrow_back,
+                  size: 40 * screenRadio,
                   color: Theme.of(context).primaryColor,
                 ),
               ),

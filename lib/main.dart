@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:oktoast/oktoast.dart';
 
 import 'pages/home.dart';
 
@@ -29,15 +30,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterEasyLoading(
-      child: MaterialApp(
-        title: 'RFID Gateway',
-        theme: ThemeData(
-          brightness: Brightness.light,
-          primaryColor: Color(0xFF9c7356),
-          accentColor: Color(0xFF8f897b),
-          scaffoldBackgroundColor: Color(0xFFe6d3ac),
+      child: OKToast(
+        dismissOtherOnShow: true,
+        child: MaterialApp(
+          title: 'RFID Gateway',
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primaryColor: Color(0xFF9c7356),
+            accentColor: Color(0xFF8f897b),
+            scaffoldBackgroundColor: Color(0xFFe6d3ac),
+          ),
+          home: HomePage(),
         ),
-        home: HomePage(),
       ),
     );
   }

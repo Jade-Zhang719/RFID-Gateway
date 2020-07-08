@@ -31,8 +31,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
     double width = MediaQuery.of(context).size.width;
     double screenRadio = width / 961.5;
 
-    Container _itemBuilder(
-        IconData icon, String variety, int count, Color color) {
+    Container _itemBuilder(String variety, int count, Color color) {
       return Container(
         width: width * 0.2,
         height: height * 0.7,
@@ -50,10 +49,9 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 70,
+                  Image.asset(
+                    'assets/cloth_icon/$variety.png',
+                    width: 80 * screenRadio,
                   ),
                   Text(
                     variety,
@@ -91,109 +89,98 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _itemBuilder(Icons.shopping_basket, "T-shirt", 1,
-                        Theme.of(context).primaryColor),
-                    _itemBuilder(Icons.shopping_basket, "Trousers", 2,
-                        Theme.of(context).accentColor),
-                    _itemBuilder(Icons.shopping_basket, "Jacket", 3,
-                        Theme.of(context).primaryColor),
-                    _itemBuilder(Icons.shopping_basket, "Accessories", 4,
-                        Theme.of(context).accentColor),
+                    _itemBuilder("T-shirt", 1, Theme.of(context).primaryColor),
+                    _itemBuilder("Trousers", 2, Theme.of(context).accentColor),
+                    _itemBuilder("Jacket", 3, Theme.of(context).primaryColor),
+                    _itemBuilder(
+                        "Accessories", 4, Theme.of(context).accentColor),
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FlatButton(
-                      child: Container(
-                        width: width * 0.2,
-                        height: height * 0.1,
-                        margin: EdgeInsets.only(right: width * 0.02),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        child: Text(
-                          "Signature",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 30 * screenRadio),
-                        ),
+                    Container(
+                      margin: EdgeInsets.only(left: width * 0.04),
+                      child: Text(
+                        "Total Qty: 10, Order No: 1",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 30 * screenRadio),
                       ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Expanded(
-                                        child: Center(
-                                          child: AspectRatio(
-                                            aspectRatio: 2.0,
-                                            child: Stack(
-                                              children: [
-                                                DottedBorder(
-                                                  color: Colors.grey,
-                                                  borderType: BorderType.RRect,
-                                                  child: Container(
-                                                    constraints:
-                                                        BoxConstraints.expand(),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: width * 0.02),
+                      child: FlatButton(
+                        child: Container(
+                          width: width * 0.2,
+                          height: height * 0.1,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          child: Text(
+                            "Signature",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30 * screenRadio),
+                          ),
+                        ),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    content: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Expanded(
+                                          child: Center(
+                                            child: AspectRatio(
+                                              aspectRatio: 2.0,
+                                              child: Stack(
+                                                children: [
+                                                  DottedBorder(
+                                                    color: Colors.grey,
+                                                    borderType:
+                                                        BorderType.RRect,
+                                                    child: Container(
+                                                      constraints:
+                                                          BoxConstraints
+                                                              .expand(),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                      ),
+                                                      child:
+                                                          HandSignaturePainterView(
+                                                        control: control,
+                                                        type: SignatureDrawType
+                                                            .shape,
+                                                      ),
                                                     ),
-                                                    child:
-                                                        HandSignaturePainterView(
+                                                  ),
+                                                  CustomPaint(
+                                                    painter:
+                                                        DebugSignaturePainterCP(
                                                       control: control,
-                                                      type: SignatureDrawType
-                                                          .shape,
+                                                      cp: false,
+                                                      cpStart: false,
+                                                      cpEnd: false,
                                                     ),
                                                   ),
-                                                ),
-                                                CustomPaint(
-                                                  painter:
-                                                      DebugSignaturePainterCP(
-                                                    control: control,
-                                                    cp: false,
-                                                    cpStart: false,
-                                                    cpEnd: false,
-                                                  ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 10),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            FlatButton(
-                                              child: Container(
-                                                padding: EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                                width: width * 0.15,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "Clear",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize:
-                                                          15 * screenRadio),
-                                                ),
-                                              ),
-                                              onPressed: control.clear,
-                                            ),
-                                            FlatButton(
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              FlatButton(
                                                 child: Container(
                                                   padding: EdgeInsets.all(10),
                                                   decoration: BoxDecoration(
@@ -201,57 +188,81 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                         BorderRadius.circular(
                                                             10),
                                                     color: Theme.of(context)
-                                                        .accentColor,
+                                                        .primaryColor,
                                                   ),
                                                   width: width * 0.15,
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    "Confirm",
+                                                    "Clear",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize:
                                                             15 * screenRadio),
                                                   ),
                                                 ),
-                                                onPressed: () async {
-                                                  // EasyLoading.show(
-                                                  //     status: 'loading...');
-                                                  rawImage.value =
-                                                      await control.toImage(
-                                                    color: Colors.black,
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                }),
-                                            FlatButton(
-                                              child: Container(
-                                                padding: EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                                width: width * 0.15,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "Cancel",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize:
-                                                          15 * screenRadio),
-                                                ),
+                                                onPressed: control.clear,
                                               ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
+                                              FlatButton(
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Theme.of(context)
+                                                          .accentColor,
+                                                    ),
+                                                    width: width * 0.15,
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      "Confirm",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize:
+                                                              15 * screenRadio),
+                                                    ),
+                                                  ),
+                                                  onPressed: () async {
+                                                    // EasyLoading.show(
+                                                    //     status: 'loading...');
+                                                    rawImage.value =
+                                                        await control.toImage(
+                                                      color: Colors.black,
+                                                    );
+                                                    Navigator.of(context).pop();
+                                                  }),
+                                              FlatButton(
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  ),
+                                                  width: width * 0.15,
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    "Cancel",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            15 * screenRadio),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ));
-                      },
+                                      ],
+                                    ),
+                                  ));
+                        },
+                      ),
                     ),
                   ],
                 ),

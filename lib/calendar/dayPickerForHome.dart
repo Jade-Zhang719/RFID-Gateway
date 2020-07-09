@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 
-import '../src/date_picker_styles.dart';
-import '../src/day_picker.dart' as dp;
-import '../src/event.dart';
-import '../src/event_decoration.dart';
-import '../src/layout_settings.dart';
+import 'event.dart';
+import 'src/date_picker_styles.dart';
+import 'src/day_picker.dart' as dp;
+import 'src/event_decoration.dart';
+import 'src/layout_settings.dart';
 
 class CustomDayPicker extends StatefulWidget {
   final double width;
@@ -42,6 +42,7 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
   @override
   void didUpdateWidget(CustomDayPicker oldWidget) {
     parentwidth = widget.width;
+    parentheight = widget.height;
     super.didUpdateWidget(oldWidget);
   }
 
@@ -66,10 +67,13 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
         lastDate: _lastDate,
         datePickerStyles: styles,
         datePickerLayoutSettings: DatePickerLayoutSettings(
-            dayPickerRowHeight: parentheight * 0.1,
-            monthPickerPortraitWidth: parentwidth,
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: parentwidth * 0.02)),
+          dayPickerRowHeight: parentheight * 0.125,
+          monthPickerPortraitWidth: parentwidth,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: parentwidth * 0.01,
+            vertical: parentheight * 0.01,
+          ),
+        ),
         eventDecorationBuilder: _eventDecorationBuilder,
       ),
     );

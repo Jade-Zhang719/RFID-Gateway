@@ -3,6 +3,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'pages/home.dart';
+import 'pages/serviceProvider.dart';
+import 'pages/staff.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         dismissOtherOnShow: true,
         child: MaterialApp(
           title: 'RFID Gateway',
+          initialRoute: '/',
           theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: Color(0xFF9c7356),
@@ -41,6 +44,12 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Color(0xFFe6d3ac),
           ),
           home: HomePage(),
+          routes: <String, WidgetBuilder>{
+            '/home': (BuildContext context) => new HomePage(),
+            '/staff': (BuildContext context) => new StaffPage(),
+            '/service_provider': (BuildContext context) =>
+                new ServiceProviderPage(),
+          },
         ),
       ),
     );

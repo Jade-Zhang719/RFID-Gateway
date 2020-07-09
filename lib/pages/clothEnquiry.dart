@@ -1,5 +1,9 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import '../calendar/dayPickerForEnquiry.dart' as dpe;
+import '../calendar/event.dart';
 
 class ClothEnquiryPage extends StatefulWidget {
   @override
@@ -7,12 +11,26 @@ class ClothEnquiryPage extends StatefulWidget {
 }
 
 class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
+  DateTime selectedDate;
+  String date;
+  Event event;
+
+  bool isEventDate;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
+
+    print("_ClothEnquiryPageState");
+    isEventDate = false;
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(ClothEnquiryPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -21,108 +39,217 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
     double width = MediaQuery.of(context).size.width;
     double screenRadio = width / 961.5;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Container(
-              width: width * 0.9,
-              height: height * 0.8,
-              margin: EdgeInsets.only(top: height * 0.1),
-              child: Table(
-                border: TableBorder.all(
-                  color: Theme.of(context).primaryColor,
-                ),
+    Container _staffClothCardBuilder(
+        String variety, int loan, int wash, int use) {
+      return Container(
+        width: width * 0.3,
+        height: height * 0.18,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 75 * screenRadio,
+              height: 75 * screenRadio,
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10 * screenRadio),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Image.asset(
+                'assets/cloth_icon/$variety.png',
+                width: 50 * screenRadio,
+              ),
+            ),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TableRow(children: [
-                    Container(
-                      padding: EdgeInsets.all(5 * screenRadio),
-                      alignment: Alignment.center,
-                      color: Theme.of(context).accentColor,
-                      child: Text(
-                        "Variety",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20 * screenRadio),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5 * screenRadio),
-                      alignment: Alignment.center,
-                      color: Theme.of(context).primaryColor,
-                      child: Text(
-                        "Qty",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20 * screenRadio),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5 * screenRadio),
-                      alignment: Alignment.center,
-                      color: Theme.of(context).accentColor,
-                      child: Text(
-                        "Statues",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20 * screenRadio),
-                      ),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    Container(
-                      padding: EdgeInsets.all(5 * screenRadio),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "T-shirt",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20 * screenRadio),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5 * screenRadio),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "2",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20 * screenRadio),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5 * screenRadio),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Washing",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20 * screenRadio),
-                      ),
-                    ),
-                  ]),
+                  Text(
+                    "Loan: ${loan.toString()}",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 20 * screenRadio),
+                  ),
+                  Text(
+                    "Wash: ${wash.toString()}",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 20 * screenRadio),
+                  ),
+                  Text(
+                    "In use: ${use.toString()}",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 20 * screenRadio),
+                  ),
                 ],
               ),
             ),
-          ),
-          Container(
-            height: 40 * screenRadio,
-            width: 40 * screenRadio,
-            margin:
-                EdgeInsets.only(left: 20 * screenRadio, top: 20 * screenRadio),
-            alignment: Alignment.topLeft,
-            child: FlatButton(
-              padding: EdgeInsets.all(0),
-              child: Container(
-                alignment: Alignment.center,
-                color: Colors.transparent,
-                child: Icon(
-                  Icons.arrow_back,
-                  size: 40 * screenRadio,
-                  color: Theme.of(context).primaryColor,
-                ),
+          ],
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: PreferredSize(
+        child: AppBar(
+          title: Text("Cloth Enquiry"),
+          leading: FlatButton(
+            padding: EdgeInsets.all(0),
+            child: Container(
+              alignment: Alignment.center,
+              color: Colors.transparent,
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            ),
+            onPressed: () {
+              Navigator.pop(
+                context,
+              );
+            },
+          ),
+        ),
+        preferredSize: Size.fromHeight(height * 0.1),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            height: height * 0.8,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: width * 0.65,
+                      height: height * 0.5,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: height * 0.01),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: width * 0.01,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: dpe.CustomDayPicker(
+                        events: events,
+                        width: width * 0.5,
+                        height: height * 0.5,
+                        onDateChange: (v) {
+                          setState(() {
+                            this.selectedDate = v;
+
+                            this.date = formatDate(v, [yyyy, "-", mm, "-", dd]);
+                            events.forEach((element) {
+                              DateTime d = element.date;
+                              if (v.year == d.year &&
+                                  v.month == d.month &&
+                                  v.day == d.day) {
+                                event = element;
+                              }
+                            });
+                            isEventDate = eventsDates?.any((DateTime d) =>
+                                v.year == d.year &&
+                                v.month == d.month &&
+                                v.day == d.day);
+                          });
+                        },
+                      ),
+                    ),
+                    // Container(
+                    //   width: width * 0.65,
+                    //   height: height * 0.28,
+                    //   alignment: Alignment.center,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     color: Theme.of(context).accentColor,
+                    //   ),
+                    // ),
+                    isEventDate
+                        ? Container(
+                            width: width * 0.65,
+                            height: height * 0.28,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  date,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20 * screenRadio,
+                                  ),
+                                ),
+                                Text(
+                                  event.dis,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20 * screenRadio,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            width: width * 0.65,
+                            height: height * 0.28,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).accentColor,
+                            ),
+                            child: Text(
+                              "No Record",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40 * screenRadio,
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+                Container(
+                  width: width * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _staffClothCardBuilder("T-shirt", 40, 20, 80),
+                      _staffClothCardBuilder("Trousers", 40, 20, 80),
+                      _staffClothCardBuilder("Jacket", 40, 20, 80),
+                      _staffClothCardBuilder("Accessories", 40, 20, 80),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
+
+final List<Event> events = [
+  Event(DateTime.now(), "Today event"),
+  Event(DateTime.now().subtract(Duration(days: 3)), "Ev1"),
+  Event(DateTime.now().subtract(Duration(days: 13)), "Ev2"),
+  Event(DateTime.now().subtract(Duration(days: 30)), "Ev3"),
+  Event(DateTime.now().add(Duration(days: 3)), "Ev4"),
+  Event(DateTime.now().add(Duration(days: 13)), "Ev5"),
+  Event(DateTime.now().add(Duration(days: 30)), "Ev6"),
+];
+
+List<DateTime> eventsDates =
+    events?.map<DateTime>((Event e) => e.date)?.toList();

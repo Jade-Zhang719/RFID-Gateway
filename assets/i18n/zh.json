@@ -1,0 +1,37 @@
+{
+    "loading...": "载入中...",
+
+    "Home": "主页",
+
+    "Staff": "员工",
+    "Please Scan Your Staff Card": "请扫描您的员工卡",
+    "Cloth Enquiry": "服装查询",
+    "No Record": "没有记录",
+
+    "Service": "服务",
+    "Provider": "提供",
+    "Please Select the Order Number": "请选择订单号",
+    "Scan": "扫描",
+    "Cloth Scan -- Order No:": "服装扫描 -- 订单号: ",
+    "Signature": "签名",
+
+    "OK": "确定",
+    "Clear": "清空",
+    "Confirm": "确定",
+    "Cancel": "取消",
+
+    "Successful": "成功",
+    "Welcome!": "欢迎!",
+    "The order is signed successful.": "此订单已成功签字.",
+
+    "T-shirt": "T恤",
+    "Trousers": "裤子",
+    "Jacket": "外套",
+    "Accessories": "配饰",
+
+    "Loan": "已借",
+    "Wash": "清洗中",
+    "Stock": "库存",
+    "In use": "使用中",
+    "Total:": "总计:"
+}

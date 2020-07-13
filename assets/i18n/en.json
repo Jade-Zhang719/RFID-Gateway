@@ -1,0 +1,37 @@
+{
+    "loading...": "loading...",
+
+    "Home": "Home",
+
+    "Staff": "Staff",
+    "Please Scan Your Staff Card": "Please Scan Your Staff Card",
+    "Cloth Enquiry": "Cloth Enquiry",
+    "No Record": "No Record",
+
+    "Service": "Service",
+    "Provider": "Provider",
+    "Please Select the Order Number": "Please Select the Order Number",
+    "Scan": "Scan",
+    "Cloth Scan -- Order No:": "Cloth Scan -- Order No: ",
+    "Signature": "Signature",
+
+    "OK": "OK",
+    "Clear": "Clear",
+    "Confirm": "Confirm",
+    "Cancel": "Cancel",
+
+    "Successful": "Successful",
+    "Welcome!": "Welcome!",
+    "The order is signed successful.": "The order is signed successful.",
+
+    "T-shirt": "T-shirt",
+    "Trousers": "Trousers",
+    "Jacket": "Jacket",
+    "Accessories": "Accessories",
+
+    "Loan": "Loan",
+    "Wash": "Wash",
+    "Stock": "Stock",
+    "In use": "In use",
+    "Total:": "Total: "
+}

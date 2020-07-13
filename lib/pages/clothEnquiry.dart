@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../calendar/dayPickerForEnquiry.dart' as dpe;
 import '../calendar/event.dart';
+import '../language/translation/localization.dart';
 
 class ClothEnquiryPage extends StatefulWidget {
   @override
@@ -23,8 +24,8 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
       EasyLoading.dismiss();
     });
 
-    print("_ClothEnquiryPageState");
     isEventDate = false;
+    print("_ClothEnquiryPageState");
     super.initState();
   }
 
@@ -69,19 +70,22 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Loan: ${loan.toString()}",
+                    '${Translations.of(context).text("Loan")}' +
+                        ": ${loan.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 20 * screenRadio),
                   ),
                   Text(
-                    "Wash: ${wash.toString()}",
+                    '${Translations.of(context).text("Wash")}' +
+                        ": ${wash.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 20 * screenRadio),
                   ),
                   Text(
-                    "In use: ${use.toString()}",
+                    '${Translations.of(context).text("In use")}' +
+                        ": ${use.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 20 * screenRadio),
@@ -97,7 +101,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          title: Text("Cloth Enquiry"),
+          title: Text('${Translations.of(context).text("Cloth Enquiry")}'),
           leading: FlatButton(
             padding: EdgeInsets.all(0),
             child: Container(
@@ -165,15 +169,6 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         },
                       ),
                     ),
-                    // Container(
-                    //   width: width * 0.65,
-                    //   height: height * 0.28,
-                    //   alignment: Alignment.center,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     color: Theme.of(context).accentColor,
-                    //   ),
-                    // ),
                     isEventDate
                         ? Container(
                             width: width * 0.65,
@@ -211,7 +206,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                               color: Theme.of(context).accentColor,
                             ),
                             child: Text(
-                              "No Record",
+                              '${Translations.of(context).text("No Record")}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 40 * screenRadio,

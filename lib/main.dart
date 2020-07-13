@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:oktoast/oktoast.dart';
 
+import 'language/translation/application.dart';
+import 'language/translation/localization.dart';
 import 'pages/home.dart';
 import 'pages/serviceProvider.dart';
 import 'pages/staff.dart';
@@ -27,15 +30,45 @@ void configLoading() {
     ..userInteractions = true;
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    Translations.currentLocale = Locale("en", "");
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    applic.onLocaleChanged = onLocaleChange;
+    super.didChangeDependencies();
+  }
+
+  onLocaleChange(Locale locale) async {
+    print('change lan: ' + locale.toString());
+    await Translations.load(locale);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return FlutterEasyLoading(
       child: OKToast(
         dismissOtherOnShow: true,
         child: MaterialApp(
-          title: 'RFID Gateway',
+          locale: Locale("en", ""),
+          localizationsDelegates: [
+            const TranslationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: applic.supportedLocales(),
+          title: "RFID Gateway",
           initialRoute: '/',
           theme: ThemeData(
             brightness: Brightness.light,

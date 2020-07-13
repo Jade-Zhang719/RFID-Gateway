@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hand_signature/signature.dart';
 
+import '../language/translation/localization.dart';
+
 class ScanConfirmPage extends StatefulWidget {
   final String orderNo;
 
@@ -64,7 +66,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                     width: 80 * screenRadio,
                   ),
                   Text(
-                    variety,
+                    '${Translations.of(context).text(variety)}',
                     style: TextStyle(
                         color: Colors.white, fontSize: 25 * screenRadio),
                   ),
@@ -92,7 +94,9 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          title: Text("Staff Cloth Enquiry -- Order No: $orderNo"),
+          title: Text(
+              '${Translations.of(context).text("Cloth Scan -- Order No:")}' +
+                  "$orderNo"),
           leading: FlatButton(
             padding: EdgeInsets.all(0),
             child: Container(
@@ -134,7 +138,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                   Container(
                     margin: EdgeInsets.only(left: width * 0.04),
                     child: Text(
-                      "Total Qty: 10",
+                      '${Translations.of(context).text("Total:")}' + "10",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 30 * screenRadio),
@@ -152,7 +156,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                           color: Theme.of(context).primaryColor,
                         ),
                         child: Text(
-                          "Signature",
+                          '${Translations.of(context).text("Signature")}',
                           style: TextStyle(
                               color: Colors.white, fontSize: 30 * screenRadio),
                         ),
@@ -221,7 +225,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                 width: width * 0.15,
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  "Clear",
+                                                  '${Translations.of(context).text("Clear")}',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize:
@@ -243,7 +247,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                   width: width * 0.15,
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    "Confirm",
+                                                    '${Translations.of(context).text("Confirm")}',
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize:
@@ -283,7 +287,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                                         screenRadio,
                                                                   ),
                                                                   Text(
-                                                                    'Successful',
+                                                                    '${Translations.of(context).text("Successful")}',
                                                                     style:
                                                                         TextStyle(
                                                                       fontSize: 30 *
@@ -311,7 +315,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                                 children: [
                                                                   Container(
                                                                     child: Text(
-                                                                      'The order is signed successful.',
+                                                                      '${Translations.of(context).text("The order is signed successful.")}',
                                                                       textAlign:
                                                                           TextAlign
                                                                               .center,
@@ -340,7 +344,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                                               0),
                                                                       child:
                                                                           Text(
-                                                                        'OK',
+                                                                        '${Translations.of(context).text("OK")}',
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white),
@@ -386,7 +390,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                 width: width * 0.15,
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  "Cancel",
+                                                  '${Translations.of(context).text("Cancel")}',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize:

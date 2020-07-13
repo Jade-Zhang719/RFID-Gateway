@@ -1,0 +1,37 @@
+{
+    "loading...": "載入中...",
+
+    "Home": "主頁",
+
+    "Staff": "員工",
+    "Please Scan Your Staff Card": "請掃描您的員工卡",
+    "Cloth Enquiry": "服裝查詢",
+    "No Record": "沒有記錄",
+
+    "Service": "服務",
+    "Provider": "提供",
+    "Please Select the Order Number": "請選擇訂單號",
+    "Scan": "掃描",
+    "Cloth Scan -- Order No:": "服裝掃描 -- 訂單號: ",
+    "Signature": "簽名",
+
+    "OK": "確定",
+    "Clear": "清空",
+    "Confirm": "確定",
+    "Cancel": "取消",
+
+    "Successful": "成果",
+    "Welcome!": "歡迎!",
+    "The order is signed successful.": "此訂單已成功簽字.",
+
+    "T-shirt": "T恤",
+    "Trousers": "褲子",
+    "Jacket": "外套",
+    "Accessories": "配飾",
+
+    "Loan": "已借",
+    "Wash": "清洗中",
+    "Stock": "庫存",
+    "In use": "使用中",
+    "Total:": "總計:"
+}

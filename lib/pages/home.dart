@@ -6,6 +6,8 @@ import 'package:video_player/video_player.dart';
 
 import '../calendar/dayPickerForHome.dart' as dph;
 import '../calendar/event.dart';
+import '../language/languageSetting.dart';
+import '../language/translation/localization.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
-  Chewie playerWidget;
+  Chewie playerVideo;
   DateTime selectedDate;
   String date;
 
@@ -29,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       autoPlay: true,
       looping: true,
     );
-    playerWidget = Chewie(
+    playerVideo = Chewie(
       controller: _chewieController,
     );
     super.initState();
@@ -78,19 +80,22 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Loan: ${loan.toString()}",
+                    '${Translations.of(context).text("Loan")}' +
+                        ": ${loan.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 15 * screenRadio),
                   ),
                   Text(
-                    "Wash: ${wash.toString()}",
+                    '${Translations.of(context).text("Wash")}' +
+                        ": ${wash.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 15 * screenRadio),
                   ),
                   Text(
-                    "Stock: ${stock.toString()}",
+                    '${Translations.of(context).text("Stock")}' +
+                        ": ${stock.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 15 * screenRadio),
@@ -106,7 +111,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          title: Text("Home"),
+          title: Text('${Translations.of(context).text("Home")}'),
+          actions: [
+            LanguageSetting(),
+          ],
         ),
         preferredSize: Size.fromHeight(height * 0.1),
       ),
@@ -130,11 +138,7 @@ class _HomePageState extends State<HomePage> {
                         color: Theme.of(context).primaryColor,
                       ),
                       padding: EdgeInsets.all(10 * screenRadio),
-                      child:
-                          // _videoPlayerController.value.initialized
-                          // ? VideoPlayer(_videoPlayerController)
-                          // : Container(),
-                          playerWidget,
+                      //child: playerVideo,
                     ),
                     Container(
                       width: width * 0.45,
@@ -204,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                                     Container(),
                                     Center(
                                       child: Text(
-                                        "Loan",
+                                        '${Translations.of(context).text("Loan")}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15 * screenRadio),
@@ -212,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Center(
                                       child: Text(
-                                        "Wash",
+                                        '${Translations.of(context).text("Wash")}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15 * screenRadio),
@@ -220,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Center(
                                       child: Text(
-                                        "Stock",
+                                        '${Translations.of(context).text("Stock")}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15 * screenRadio),
@@ -232,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Center(
                                       child: Text(
-                                        "Total:",
+                                        '${Translations.of(context).text("Total:")}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 25 * screenRadio),
@@ -295,7 +299,7 @@ class _HomePageState extends State<HomePage> {
                                       size: 50 * screenRadio,
                                     ),
                                     Text(
-                                      "Staff",
+                                      '${Translations.of(context).text("Staff")}',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20 * screenRadio),
@@ -304,7 +308,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               onPressed: () {
-                                EasyLoading.show(status: 'loading...');
+                                EasyLoading.show(
+                                    status:
+                                        '${Translations.of(context).text("loading...")}');
                                 Navigator.pushNamed(
                                   context,
                                   '/staff',
@@ -332,7 +338,8 @@ class _HomePageState extends State<HomePage> {
                                       size: 50 * screenRadio,
                                     ),
                                     Text(
-                                      "Service\nProvider",
+                                      '${Translations.of(context).text("Service")}' +
+                                          '\n${Translations.of(context).text("Provider")}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.white,
@@ -342,7 +349,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               onPressed: () {
-                                EasyLoading.show(status: 'loading...');
+                                EasyLoading.show(
+                                    status:
+                                        '${Translations.of(context).text("loading...")}');
                                 Navigator.pushNamed(
                                   context,
                                   '/service_provider',

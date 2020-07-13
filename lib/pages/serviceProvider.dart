@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../language/translation/localization.dart';
 import 'scanConfirm.dart';
 
 class ServiceProviderPage extends StatefulWidget {
@@ -30,7 +31,10 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          title: Text("Service Provider"),
+          title: Text(
+            '${Translations.of(context).text("Service")}' +
+                '${Translations.of(context).text("Provider")}',
+          ),
           leading: FlatButton(
             padding: EdgeInsets.all(0),
             child: Container(
@@ -70,7 +74,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Please Select the Order Number",
+                          '${Translations.of(context).text("Please Select the Order Number")}',
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: 40 * screenRadio),
@@ -118,7 +122,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                         color: Theme.of(context).primaryColor,
                       ),
                       child: Text(
-                        "Scan",
+                        '${Translations.of(context).text("Scan")}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white, fontSize: 40 * screenRadio),
@@ -126,7 +130,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                     ),
                     onPressed: (dropdownValue != null)
                         ? () {
-                            EasyLoading.show(status: 'loading...');
+                            EasyLoading.show(
+                                status:
+                                    '${Translations.of(context).text("loading...")}');
                             Navigator.push(
                               context,
                               new MaterialPageRoute(

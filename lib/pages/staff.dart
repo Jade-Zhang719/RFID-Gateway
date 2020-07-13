@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../language/translation/localization.dart';
 import 'clothEnquiry.dart';
 
 class StaffPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _StaffPageState extends State<StaffPage> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          title: Text("Staff"),
+          title: Text('${Translations.of(context).text("Staff")}'),
           leading: FlatButton(
             padding: EdgeInsets.all(0),
             child: Container(
@@ -37,7 +38,6 @@ class _StaffPageState extends State<StaffPage> {
               color: Colors.transparent,
               child: Icon(
                 Icons.arrow_back,
-                // size: 30 * screenRadio,
                 color: Colors.white,
               ),
             ),
@@ -67,7 +67,7 @@ class _StaffPageState extends State<StaffPage> {
                     height: height * 0.6,
                     alignment: Alignment.center,
                     child: Text(
-                      "Please Scan Your Staff Card",
+                      '${Translations.of(context).text("Please Scan Your Staff Card")}',
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 50 * screenRadio),
@@ -85,7 +85,7 @@ class _StaffPageState extends State<StaffPage> {
                         color: Theme.of(context).primaryColor,
                       ),
                       child: Text(
-                        "OK",
+                        '${Translations.of(context).text("OK")}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white, fontSize: 40 * screenRadio),
@@ -113,7 +113,7 @@ class _StaffPageState extends State<StaffPage> {
                                         size: 90 * screenRadio,
                                       ),
                                       Text(
-                                        'Successful',
+                                        '${Translations.of(context).text("Successful")}',
                                         style: TextStyle(
                                           fontSize: 30 * screenRadio,
                                           fontWeight: FontWeight.bold,
@@ -131,7 +131,7 @@ class _StaffPageState extends State<StaffPage> {
                                     children: [
                                       Container(
                                         child: Text(
-                                          'Welcome!',
+                                          '${Translations.of(context).text("Welcome!")}',
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -148,7 +148,7 @@ class _StaffPageState extends State<StaffPage> {
                                         child: FlatButton(
                                           padding: EdgeInsets.all(0),
                                           child: Text(
-                                            'OK',
+                                            '${Translations.of(context).text("OK")}',
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),

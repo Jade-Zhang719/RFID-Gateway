@@ -49,14 +49,14 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
   @override
   Widget build(BuildContext context) {
     DatePickerStyles styles = DatePickerRangeStyles(
-      selectedDateStyle: Theme.of(context)
-          .accentTextTheme
-          .bodyText1
-          .copyWith(color: Colors.white),
+      currentDateStyle: TextStyle(
+        color: Colors.purple[300],
+        fontWeight: FontWeight.bold,
+      ),
+      selectedDateStyle: TextStyle(color: Colors.white),
       selectedSingleDateDecoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(10),
+        shape: BoxShape.circle,
+        color: Color(0XFFA49F94),
       ),
     );
     return Container(
@@ -103,69 +103,73 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
           }
         });
 
-        showToastWidget(
-          Row(
-            children: [
-              Container(
-                width: parentwidth * 0.4,
-                height: parentheight * 0.5,
-                margin: EdgeInsets.only(
-                  left: parentwidth * 0.48,
-                  bottom: parentheight * 0.35,
-                ),
-                padding: EdgeInsets.all(parentwidth * 0.01),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: parentwidth * 0.01,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        event.dis,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                          onPressed: () {
-                            dismissAllToast();
-                          },
-                          child: Container(
-                            child: Text(
-                              "Close",
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          position: ToastPosition.bottom,
-          duration: Duration(seconds: 10),
-          handleTouch: true,
-        );
+        // showToastWidget(
+        //   Row(
+        //     children: [
+        //       Container(
+        //         width: parentwidth * 0.4,
+        //         height: parentheight * 0.5,
+        //         margin: EdgeInsets.only(
+        //           left: parentwidth * 0.48,
+        //           bottom: parentheight * 0.35,
+        //         ),
+        //         padding: EdgeInsets.all(parentwidth * 0.01),
+        //         decoration: BoxDecoration(
+        //           border: Border.all(
+        //             width: parentwidth * 0.01,
+        //             color: Theme.of(context).scaffoldBackgroundColor,
+        //           ),
+        //           borderRadius: BorderRadius.circular(10),
+        //           color: Colors.white,
+        //         ),
+        //         child: Column(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: <Widget>[
+        //             Container(
+        //               child: Text(
+        //                 event.dis,
+        //                 style: TextStyle(
+        //                   color: Color(0XFFA49F94),
+        //                 ),
+        //               ),
+        //             ),
+        //             Row(
+        //               mainAxisAlignment: MainAxisAlignment.end,
+        //               children: <Widget>[
+        //                 FlatButton(
+        //                   onPressed: () {
+        //                     dismissAllToast();
+        //                   },
+        //                   child: Container(
+        //                     child: Text(
+        //                       "Close",
+        //                       style: TextStyle(
+        //                         color: Color(0XFFA49F94),
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 )
+        //               ],
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        //   position: ToastPosition.bottom,
+        //   duration: Duration(seconds: 10),
+        //   handleTouch: true,
+        // );
       }
     });
   }
 
   EventDecoration _eventDecorationBuilder(DateTime date) {
     bool isSunday = date.weekday == 7;
+    bool isToday = (date.day == DateTime.now().day) &&
+        (date.month == DateTime.now().month) &&
+        (date.year == DateTime.now().year);
+
     List<DateTime> eventsDates =
         widget.events?.map<DateTime>((Event e) => e.date)?.toList();
     bool isEventDate = eventsDates?.any((DateTime d) =>
@@ -175,14 +179,24 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
         false;
 
     BoxDecoration eventBox = BoxDecoration(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      borderRadius: BorderRadius.circular(10),
+      shape: BoxShape.circle,
+      color: isToday
+          ? Colors.purple[100]
+          : isSunday ? Colors.red[100] : Colors.cyan[100],
     );
-    TextStyle sundayText = TextStyle(color: Colors.red);
+
+    TextStyle eventText = TextStyle(
+      color: isToday
+          ? Colors.purple[300]
+          : isSunday ? Colors.red[300] : Colors.cyan,
+      decoration: TextDecoration.underline,
+    );
 
     return EventDecoration(
       boxDecoration: isEventDate ? eventBox : null,
-      textStyle: isSunday ? sundayText : null,
+      textStyle: isEventDate
+          ? eventText
+          : isSunday ? TextStyle(color: Colors.red[300]) : null,
     );
   }
 }

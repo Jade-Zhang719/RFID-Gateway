@@ -39,6 +39,7 @@ dependencies:
   date_format: ^1.0.8
   oktoast: ^2.3.2
   intl: ">=0.15.2 <0.17.0"
+  progress_indicators: ^0.1.5
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +58,7 @@ flutter:
     - assets/video/rfid_homepage.mp4
     - assets/cloth_icon/
     - assets/i18n/
+    - assets/image/boxland.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

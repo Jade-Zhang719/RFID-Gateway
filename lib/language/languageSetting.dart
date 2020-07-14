@@ -20,76 +20,47 @@ class _LanguageSettingState extends State<LanguageSetting> {
 
     double screenRadio = width / 961.5;
 
+    Container _languageSettingButtonBulder(String language, String lanCode) {
+      return Container(
+        width: 50 * screenRadio,
+        child: FlatButton(
+          child: Text(
+            language,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15 * screenRadio,
+            ),
+          ),
+          onPressed: () {
+            setState(() {
+              changeLanguage(Locale(lanCode, ""));
+            });
+          },
+        ),
+      );
+    }
+
     return Container(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Translations.currentLocale == Locale("en", "")
-              ? Container()
-              : FlatButton(
-                  child: Text(
-                    "EN",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20 * screenRadio,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      changeLanguage(Locale("en", ""));
-                    });
-                  },
-                ),
-          Translations.currentLocale == Locale("en", "")
-              ? Container()
-              : Container(
-                  height: height * 0.06,
-                  child: VerticalDivider(
-                    color: Colors.white,
-                  ),
-                ),
-          Translations.currentLocale == Locale("tw", "")
-              ? Container()
-              : FlatButton(
-                  child: Text(
-                    "繁",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20 * screenRadio,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      changeLanguage(Locale("tw", ""));
-                    });
-                  },
-                ),
-          Translations.currentLocale == Locale("en", "")
-              ? Container(
-                  height: height * 0.06,
-                  child: VerticalDivider(
-                    color: Colors.white,
-                  ),
+      child: Translations.currentLocale == Locale("en", "")
+          ? Row(
+              children: [
+                _languageSettingButtonBulder("繁", "tw"),
+                _languageSettingButtonBulder("简", "zh"),
+              ],
+            )
+          : (Translations.currentLocale == Locale("tw", "")
+              ? Row(
+                  children: [
+                    _languageSettingButtonBulder("EN", "en"),
+                    _languageSettingButtonBulder("简", "zh"),
+                  ],
                 )
-              : Container(),
-          Translations.currentLocale == Locale("zh", "")
-              ? Container()
-              : FlatButton(
-                  child: Text(
-                    "简",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20 * screenRadio,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      changeLanguage(Locale("zh", ""));
-                    });
-                  },
-                ),
-        ],
-      ),
+              : Row(
+                  children: [
+                    _languageSettingButtonBulder("繁", "tw"),
+                    _languageSettingButtonBulder("EN", "en"),
+                  ],
+                )),
     );
   }
 }

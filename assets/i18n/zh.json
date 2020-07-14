@@ -2,14 +2,14 @@
     "loading...": "载入中...",
 
     "Home": "主页",
+    "Event Menu": "事件列表",
 
     "Staff": "员工",
     "Please Scan Your Staff Card": "请扫描您的员工卡",
     "Cloth Enquiry": "服装查询",
     "No Record": "没有记录",
 
-    "Service": "服务",
-    "Provider": "提供",
+    "Service Provider": "服务提供",
     "Please Select the Order Number": "请选择订单号",
     "Scan": "扫描",
     "Cloth Scan -- Order No:": "服装扫描 -- 订单号: ",

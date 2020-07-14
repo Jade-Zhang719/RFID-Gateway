@@ -26,7 +26,7 @@ mixin CommonDatePickerFunctions {
       final String weekday = localizations.narrowWeekdays[i];
       result.add(ExcludeSemantics(
         child: Container(
-          color: Color(0xFF9c7356),
+          color: Color(0XFFA49F94),
           child: Center(
             child: Text(weekday,
                 style: (i % 7 == 0)

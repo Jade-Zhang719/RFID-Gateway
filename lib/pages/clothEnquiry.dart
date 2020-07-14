@@ -99,27 +99,24 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
     }
 
     return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-          title: Text('${Translations.of(context).text("Cloth Enquiry")}'),
-          leading: FlatButton(
-            padding: EdgeInsets.all(0),
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
+      appBar: AppBar(
+        title: Text('${Translations.of(context).text("Cloth Enquiry")}'),
+        leading: FlatButton(
+          padding: EdgeInsets.all(0),
+          child: Container(
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
             ),
-            onPressed: () {
-              Navigator.pop(
-                context,
-              );
-            },
           ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+            );
+          },
         ),
-        preferredSize: Size.fromHeight(height * 0.1),
       ),
       body: SafeArea(
         child: Center(

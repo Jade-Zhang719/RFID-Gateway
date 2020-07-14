@@ -5,6 +5,26 @@ import 'package:hand_signature/signature.dart';
 
 import '../language/translation/localization.dart';
 
+BoxDecoration buttonBox = BoxDecoration(
+  borderRadius: BorderRadius.circular(10),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.grey,
+      offset: Offset(1.0, 1.0),
+      blurRadius: 10.0,
+      spreadRadius: 2.0,
+    )
+  ],
+  gradient: LinearGradient(
+    colors: [
+      Color(0XFFA49F94),
+      Colors.grey[300],
+    ],
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+  ),
+);
+
 class ScanConfirmPage extends StatefulWidget {
   final String orderNo;
 
@@ -49,41 +69,63 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
         width: width * 0.2,
         height: height * 0.65,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: width * 0.2,
-              height: height * 0.35,
+              width: width * 0.15,
+              height: height * 0.15,
+              padding: EdgeInsets.all(height * 0.02),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(5.0, 5.0),
+                      blurRadius: 10.0,
+                      spreadRadius: 2.0)
+                ],
                 color: color,
+              ),
+              child: Image.asset(
+                'assets/cloth_icon/$variety.png',
+              ),
+            ),
+            Container(
+              width: width * 0.15,
+              height: height * 0.45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(5.0, 5.0),
+                      blurRadius: 10.0,
+                      spreadRadius: 2.0)
+                ],
+                color: Colors.white,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset(
-                    'assets/cloth_icon/$variety.png',
-                    width: 80 * screenRadio,
+                  Container(
+                    alignment: Alignment.center,
+                    width: width * 0.12,
+                    height: width * 0.12,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color,
+                    ),
+                    child: Text(
+                      count.toString(),
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 60 * screenRadio),
+                    ),
                   ),
                   Text(
                     '${Translations.of(context).text(variety)}',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: 25 * screenRadio),
+                    style: TextStyle(color: color, fontSize: 20 * screenRadio),
                   ),
                 ],
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: width * 0.2,
-              height: height * 0.15,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Text(
-                count.toString(),
-                style: TextStyle(color: color, fontSize: 40 * screenRadio),
               ),
             ),
           ],
@@ -92,31 +134,28 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
     }
 
     return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-          title: Text(
-              '${Translations.of(context).text("Cloth Scan -- Order No:")}' +
-                  "$orderNo"),
-          leading: FlatButton(
-            padding: EdgeInsets.all(0),
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
+      appBar: AppBar(
+        title: Text(
+            '${Translations.of(context).text("Cloth Scan -- Order No:")}' +
+                "$orderNo"),
+        leading: FlatButton(
+          padding: EdgeInsets.all(0),
+          child: Container(
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigator.popUntil(
-              //   context,
-              //   ModalRoute.withName('/service_provider'),
-              // );
-            },
           ),
+          onPressed: () {
+            Navigator.pop(context);
+            // Navigator.popUntil(
+            //   context,
+            //   ModalRoute.withName('/service_provider'),
+            // );
+          },
         ),
-        preferredSize: Size.fromHeight(height * 0.1),
       ),
       body: SafeArea(
         child: Container(
@@ -126,9 +165,9 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _itemBuilder("T-shirt", 1, Theme.of(context).primaryColor),
+                  _itemBuilder("T-shirt", 1, Color(0XFFA49F94)),
                   _itemBuilder("Trousers", 2, Theme.of(context).accentColor),
-                  _itemBuilder("Jacket", 3, Theme.of(context).primaryColor),
+                  _itemBuilder("Jacket", 3, Color(0XFFA49F94)),
                   _itemBuilder("Accessories", 4, Theme.of(context).accentColor),
                 ],
               ),
@@ -147,14 +186,12 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                   Container(
                     margin: EdgeInsets.only(right: width * 0.02),
                     child: FlatButton(
+                      padding: EdgeInsets.all(0),
                       child: Container(
                         width: width * 0.2,
                         height: height * 0.1,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColor,
-                        ),
+                        decoration: buttonBox,
                         child: Text(
                           '${Translations.of(context).text("Signature")}',
                           style: TextStyle(
@@ -219,8 +256,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
+                                                  color: Color(0XFFA49F94),
                                                 ),
                                                 width: width * 0.15,
                                                 alignment: Alignment.center,

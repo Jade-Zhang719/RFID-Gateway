@@ -53,7 +53,7 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
           .bodyText1
           .copyWith(color: Colors.white),
       selectedSingleDateDecoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
+        color: Color(0XFFA49F94),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(10),
       ),

@@ -72,9 +72,10 @@ class _MyAppState extends State<MyApp> {
           initialRoute: '/',
           theme: ThemeData(
             brightness: Brightness.light,
-            primaryColor: Color(0xFF9c7356),
-            accentColor: Color(0xFF8f897b),
-            scaffoldBackgroundColor: Color(0xFFe6d3ac),
+            primaryColor: Color(0XFF8d836f),
+            accentColor: Color(0xFFd2c7bb),
+            cardColor: Color(0xFFe1dcd6),
+            scaffoldBackgroundColor: Color(0xFFf4f3f1),
           ),
           home: HomePage(),
           routes: <String, WidgetBuilder>{

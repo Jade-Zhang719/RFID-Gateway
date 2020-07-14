@@ -2,14 +2,14 @@
     "loading...": "loading...",
 
     "Home": "Home",
+    "Event Menu": "Event Menu",
 
     "Staff": "Staff",
     "Please Scan Your Staff Card": "Please Scan Your Staff Card",
     "Cloth Enquiry": "Cloth Enquiry",
     "No Record": "No Record",
 
-    "Service": "Service",
-    "Provider": "Provider",
+    "Service Provider": "Service Provider",
     "Please Select the Order Number": "Please Select the Order Number",
     "Scan": "Scan",
     "Cloth Scan -- Order No:": "Cloth Scan -- Order No: ",

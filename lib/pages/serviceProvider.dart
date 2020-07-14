@@ -6,6 +6,26 @@ import 'package:oktoast/oktoast.dart';
 import '../language/translation/localization.dart';
 import 'scanConfirm.dart';
 
+BoxDecoration buttonBox = BoxDecoration(
+  borderRadius: BorderRadius.circular(10),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.grey,
+      offset: Offset(1.0, 1.0),
+      blurRadius: 10.0,
+      spreadRadius: 2.0,
+    )
+  ],
+  gradient: LinearGradient(
+    colors: [
+      Color(0XFFA49F94),
+      Colors.grey[300],
+    ],
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+  ),
+);
+
 class ServiceProviderPage extends StatefulWidget {
   @override
   _ServiceProviderPageState createState() => _ServiceProviderPageState();
@@ -29,30 +49,26 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
     double width = MediaQuery.of(context).size.width;
     double screenRadio = width / 961.5;
     return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-          title: Text(
-            '${Translations.of(context).text("Service")}' +
-                '${Translations.of(context).text("Provider")}',
-          ),
-          leading: FlatButton(
-            padding: EdgeInsets.all(0),
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              Navigator.pop(
-                context,
-              );
-            },
-          ),
+      appBar: AppBar(
+        title: Text(
+          '${Translations.of(context).text("Service Provider")}',
         ),
-        preferredSize: Size.fromHeight(height * 0.1),
+        leading: FlatButton(
+          padding: EdgeInsets.all(0),
+          child: Container(
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+            );
+          },
+        ),
       ),
       body: SafeArea(
         child: Center(
@@ -112,38 +128,34 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                     ),
                   ),
                 ),
-                Container(
-                  child: FlatButton(
-                    child: Container(
-                      width: width * 0.4,
-                      height: height * 0.1,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      child: Text(
-                        '${Translations.of(context).text("Scan")}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 40 * screenRadio),
-                      ),
+                FlatButton(
+                  padding: EdgeInsets.all(0),
+                  child: Container(
+                    width: width * 0.4,
+                    height: height * 0.1,
+                    decoration: buttonBox,
+                    child: Text(
+                      '${Translations.of(context).text("Scan")}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 40 * screenRadio),
                     ),
-                    onPressed: (dropdownValue != null)
-                        ? () {
-                            EasyLoading.show(
-                                status:
-                                    '${Translations.of(context).text("loading...")}');
-                            Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                builder: (context) => new ScanConfirmPage(
-                                  orderNo: dropdownValue,
-                                ),
-                              ),
-                            );
-                          }
-                        : null,
                   ),
+                  onPressed: (dropdownValue != null)
+                      ? () {
+                          EasyLoading.show(
+                              status:
+                                  '${Translations.of(context).text("loading...")}');
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                              builder: (context) => new ScanConfirmPage(
+                                orderNo: dropdownValue,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
                 ),
               ],
             ),

@@ -40,6 +40,8 @@ dependencies:
   oktoast: ^2.3.2
   intl: ">=0.15.2 <0.17.0"
   progress_indicators: ^0.1.5
+  http: ^0.12.0+4
+  signalr_client: ^0.1.6
 
 dev_dependencies:
   flutter_test:

@@ -146,7 +146,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                           ),
                     alignment: Alignment.center,
                     child: Text(
-                      '${Translations.of(context).text("Scan")}',
+                      '${Translations.of(context).text("Start")}',
                       style: TextStyle(
                           color: Colors.white, fontSize: 40 * screenRadio),
                     ),

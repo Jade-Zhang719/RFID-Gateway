@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hand_signature/signature.dart';
+import 'package:signalr_client/hub_connection.dart';
 
 import '../clothIcon.dart';
+import '../hub/rfidHub.dart';
 import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
 
@@ -21,12 +24,21 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
   String orderNo;
   int itemType;
 
+  dynamic scannedProduct;
+  List scannedEpcs = [];
+
+  RFIDHub _rfidHub;
+
+  // ignore: cancel_subscriptions
+  StreamSubscription<Object> _subscription;
+
   HandSignatureControl control = new HandSignatureControl(
     threshold: 5.0,
     smoothRatio: 0.65,
     velocityRange: 2.0,
   );
   // ValueNotifier<ByteData> rawImage = ValueNotifier<ByteData>(null);
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -34,6 +46,8 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
     });
     orderNo = widget.orderNo;
     itemType = 2;
+    scannedEpcs = [];
+    _rfidHub = RFIDHub();
     super.initState();
   }
 
@@ -41,6 +55,12 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
   void didUpdateWidget(ScanConfirmPage oldWidget) {
     orderNo = widget.orderNo;
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    this._subscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -420,85 +440,194 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                           ],
                         ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: width * 0.04),
+                    width: width * 0.2,
+                    height: height * 0.1,
                     child: Text(
-                      '${Translations.of(context).text("Total:")}' + "10",
+                      '${Translations.of(context).text("Total:")}' +
+                          scannedEpcs.length.toString(),
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 30 * screenRadio),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(right: width * 0.04),
-                    child: FlatButton(
-                      padding: EdgeInsets.all(0),
-                      child: Container(
-                        width: width * 0.2,
-                        height: height * 0.1,
-                        alignment: Alignment.center,
-                        decoration: buttonBox,
-                        child: Text(
-                          '${Translations.of(context).text("Signature")}',
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 30 * screenRadio),
-                        ),
+                  FlatButton(
+                    padding: EdgeInsets.all(0),
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.1,
+                      alignment: Alignment.center,
+                      decoration: buttonBox,
+                      child: Text(
+                        '${Translations.of(context).text("Scan")}',
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 30 * screenRadio),
                       ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Expanded(
-                                        child: Center(
-                                          child: AspectRatio(
-                                            aspectRatio: 2.0,
-                                            child: Stack(
-                                              children: [
-                                                DottedBorder(
-                                                  color: Colors.grey,
-                                                  borderType: BorderType.RRect,
-                                                  child: Container(
-                                                    constraints:
-                                                        BoxConstraints.expand(),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                    ),
-                                                    child:
-                                                        HandSignaturePainterView(
-                                                      control: control,
-                                                      type: SignatureDrawType
-                                                          .shape,
-                                                    ),
+                    ),
+                    onPressed: (this._rfidHub.getConnectionState() ==
+                            HubConnectionState.Connected)
+                        ? null
+                        : () async {
+                            await this._rfidHub.connect().then((value) {
+                              if (this._rfidHub.getConnectionState() ==
+                                  HubConnectionState.Connected) {
+                                print(this._rfidHub.getConnectionState());
+                                setState(() {
+                                  this
+                                      ._rfidHub
+                                      .trayListener((List<Object> results) {
+                                    print("Tray: $results");
+                                    this._subscription = this
+                                        ._rfidHub
+                                        .streamProducts()
+                                        .listen((epc) async {
+                                      if (epc is Map) {
+                                        String epcString = epc['epc']
+                                            .toString()
+                                            .replaceAll(" ", "");
+
+                                        bool alreadyAdd = false;
+
+                                        for (String e in this.scannedEpcs) {
+                                          if (e == epcString) {
+                                            alreadyAdd = true;
+                                            break;
+                                          }
+                                        }
+
+                                        if (!alreadyAdd && epc["active"] == 1) {
+                                          this.scannedEpcs.add(epcString);
+                                          // print(epc);
+                                          // print("Scanned Epcs: ${this.scannedEpcs}");
+                                          // print("Already Added: $alreadyAdd");
+                                        }
+
+                                        // if (!alreadyAdd && epc['active'] == 1) {
+                                        //   await this.addEpcProductReceived(epcString);
+                                        //   print("Already Added: ${this.scannedEpcs}");
+                                        // }
+
+                                        // if (alreadyAdd && epc['active'] == 1) {
+                                        //   this.removeEpcProductsInTray(epcString);
+                                        // }
+                                      }
+                                    });
+                                  });
+                                  this._rfidHub.associateMobileDevice();
+                                });
+                              }
+                            });
+                          },
+                  ),
+                  FlatButton(
+                    padding: EdgeInsets.all(0),
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.1,
+                      alignment: Alignment.center,
+                      decoration: buttonBox,
+                      child: Text(
+                        '${Translations.of(context).text("Reset")}',
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 30 * screenRadio),
+                      ),
+                    ),
+                    onPressed: (this._rfidHub.getConnectionState() ==
+                            HubConnectionState.Connected)
+                        ? () async {
+                            await _rfidHub.disconnect();
+                            print(this._rfidHub.getConnectionState());
+
+                            setState(() {
+                              scannedEpcs.clear();
+                            });
+                          }
+                        : null,
+                  ),
+                  FlatButton(
+                    padding: EdgeInsets.all(0),
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.1,
+                      alignment: Alignment.center,
+                      decoration: buttonBox,
+                      child: Text(
+                        '${Translations.of(context).text("Signature")}',
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 30 * screenRadio),
+                      ),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                content: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: AspectRatio(
+                                          aspectRatio: 2.0,
+                                          child: Stack(
+                                            children: [
+                                              DottedBorder(
+                                                color: Colors.grey,
+                                                borderType: BorderType.RRect,
+                                                child: Container(
+                                                  constraints:
+                                                      BoxConstraints.expand(),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
                                                   ),
-                                                ),
-                                                CustomPaint(
-                                                  painter:
-                                                      DebugSignaturePainterCP(
+                                                  child:
+                                                      HandSignaturePainterView(
                                                     control: control,
-                                                    cp: false,
-                                                    cpStart: false,
-                                                    cpEnd: false,
+                                                    type:
+                                                        SignatureDrawType.shape,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                              CustomPaint(
+                                                painter:
+                                                    DebugSignaturePainterCP(
+                                                  control: control,
+                                                  cp: false,
+                                                  cpStart: false,
+                                                  cpEnd: false,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 10),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            FlatButton(
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          FlatButton(
+                                            padding: EdgeInsets.all(0),
+                                            child: Container(
+                                              padding: EdgeInsets.all(10),
+                                              decoration: buttonBox,
+                                              width: width * 0.15,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                '${Translations.of(context).text("Clear")}',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15 * screenRadio),
+                                              ),
+                                            ),
+                                            onPressed: control.clear,
+                                          ),
+                                          FlatButton(
                                               padding: EdgeInsets.all(0),
                                               child: Container(
                                                 padding: EdgeInsets.all(10),
@@ -506,183 +635,161 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                 width: width * 0.15,
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  '${Translations.of(context).text("Clear")}',
+                                                  '${Translations.of(context).text("Confirm")}',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize:
                                                           15 * screenRadio),
                                                 ),
                                               ),
-                                              onPressed: control.clear,
-                                            ),
-                                            FlatButton(
-                                                padding: EdgeInsets.all(0),
-                                                child: Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  decoration: buttonBox,
-                                                  width: width * 0.15,
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    '${Translations.of(context).text("Confirm")}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            15 * screenRadio),
-                                                  ),
-                                                ),
-                                                onPressed: () async {
-                                                  await showGeneralDialog(
-                                                      context: context,
-                                                      pageBuilder: (context,
-                                                          anim1, anim2) {},
-                                                      barrierColor: Colors.grey
-                                                          .withOpacity(.4),
-                                                      barrierDismissible: false,
-                                                      barrierLabel: "",
-                                                      transitionDuration:
-                                                          Duration(
-                                                              milliseconds:
-                                                                  400),
-                                                      transitionBuilder:
-                                                          (context, anim1,
-                                                              anim2, child) {
-                                                        return Transform.scale(
-                                                          scale: anim1.value,
-                                                          child: Opacity(
-                                                            opacity:
-                                                                anim1.value,
-                                                            child: AlertDialog(
-                                                              title: Column(
-                                                                children: [
-                                                                  Icon(
-                                                                    Icons
-                                                                        .check_circle,
+                                              onPressed: () async {
+                                                await showGeneralDialog(
+                                                    context: context,
+                                                    pageBuilder: (context,
+                                                        anim1, anim2) {},
+                                                    barrierColor: Colors.grey
+                                                        .withOpacity(.4),
+                                                    barrierDismissible: false,
+                                                    barrierLabel: "",
+                                                    transitionDuration:
+                                                        Duration(
+                                                            milliseconds: 400),
+                                                    transitionBuilder: (context,
+                                                        anim1, anim2, child) {
+                                                      return Transform.scale(
+                                                        scale: anim1.value,
+                                                        child: Opacity(
+                                                          opacity: anim1.value,
+                                                          child: AlertDialog(
+                                                            title: Column(
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .check_circle,
+                                                                  color: Color(
+                                                                      0XFFaec49d),
+                                                                  size: 90 *
+                                                                      screenRadio,
+                                                                ),
+                                                                Text(
+                                                                  '${Translations.of(context).text("Successful")}',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize: 30 *
+                                                                        screenRadio,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            contentPadding: EdgeInsets.fromLTRB(
+                                                                24 *
+                                                                    screenRadio,
+                                                                15 *
+                                                                    screenRadio,
+                                                                24 *
+                                                                    screenRadio,
+                                                                15 *
+                                                                    screenRadio),
+                                                            content: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                Container(
+                                                                  child: Text(
+                                                                    '${Translations.of(context).text("The order is signed successful.")}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  width: 170 *
+                                                                      screenRadio,
+                                                                  margin: EdgeInsets.only(
+                                                                      top: 20 *
+                                                                          screenRadio,
+                                                                      bottom: 10 *
+                                                                          screenRadio),
+                                                                  decoration:
+                                                                      BoxDecoration(
                                                                     color: Color(
                                                                         0XFFaec49d),
-                                                                    size: 90 *
-                                                                        screenRadio,
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(30)),
                                                                   ),
-                                                                  Text(
-                                                                    '${Translations.of(context).text("Successful")}',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize: 30 *
-                                                                          screenRadio,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              contentPadding: EdgeInsets.fromLTRB(
-                                                                  24 *
-                                                                      screenRadio,
-                                                                  15 *
-                                                                      screenRadio,
-                                                                  24 *
-                                                                      screenRadio,
-                                                                  15 *
-                                                                      screenRadio),
-                                                              content: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  Container(
+                                                                  child:
+                                                                      FlatButton(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .all(0),
                                                                     child: Text(
-                                                                      '${Translations.of(context).text("The order is signed successful.")}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
+                                                                      '${Translations.of(context).text("OK")}',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white),
                                                                     ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
                                                                   ),
-                                                                  Container(
-                                                                    width: 170 *
-                                                                        screenRadio,
-                                                                    margin: EdgeInsets.only(
-                                                                        top: 20 *
-                                                                            screenRadio,
-                                                                        bottom: 10 *
-                                                                            screenRadio),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: Color(
-                                                                          0XFFaec49d),
-                                                                      borderRadius:
-                                                                          BorderRadius.all(
-                                                                              Radius.circular(30)),
-                                                                    ),
-                                                                    child:
-                                                                        FlatButton(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              0),
-                                                                      child:
-                                                                          Text(
-                                                                        '${Translations.of(context).text("OK")}',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20)),
-                                                              ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          20)),
                                                             ),
                                                           ),
-                                                        );
-                                                      });
+                                                        ),
+                                                      );
+                                                    });
 
-                                                  // EasyLoading.show(
-                                                  //     status: 'loading...');
-                                                  // rawImage.value =
-                                                  //     await control.toImage(
-                                                  //   color: Colors.black,
-                                                  // );
-                                                  control.clear();
-                                                  Navigator.of(context).pop();
-                                                }),
-                                            FlatButton(
-                                              padding: EdgeInsets.all(0),
-                                              child: Container(
-                                                padding: EdgeInsets.all(10),
-                                                decoration: buttonBox,
-                                                width: width * 0.15,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  '${Translations.of(context).text("Cancel")}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize:
-                                                          15 * screenRadio),
-                                                ),
-                                              ),
-                                              onPressed: () {
+                                                // EasyLoading.show(
+                                                //     status: 'loading...');
+                                                // rawImage.value =
+                                                //     await control.toImage(
+                                                //   color: Colors.black,
+                                                // );
                                                 control.clear();
                                                 Navigator.of(context).pop();
-                                              },
+                                              }),
+                                          FlatButton(
+                                            padding: EdgeInsets.all(0),
+                                            child: Container(
+                                              padding: EdgeInsets.all(10),
+                                              decoration: buttonBox,
+                                              width: width * 0.15,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                '${Translations.of(context).text("Cancel")}',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15 * screenRadio),
+                                              ),
                                             ),
-                                          ],
-                                        ),
+                                            onPressed: () {
+                                              control.clear();
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ));
-                      },
-                    ),
+                                    ),
+                                  ],
+                                ),
+                              ));
+                    },
                   ),
                 ],
               ),

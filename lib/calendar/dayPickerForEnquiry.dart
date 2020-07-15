@@ -48,14 +48,14 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
   @override
   Widget build(BuildContext context) {
     DatePickerStyles styles = DatePickerRangeStyles(
-      selectedDateStyle: Theme.of(context)
-          .accentTextTheme
-          .bodyText1
-          .copyWith(color: Colors.white),
+      currentDateStyle: TextStyle(
+        color: Colors.purple[300],
+        fontWeight: FontWeight.bold,
+      ),
+      selectedDateStyle: TextStyle(color: Colors.white),
       selectedSingleDateDecoration: BoxDecoration(
+        shape: BoxShape.circle,
         color: Color(0XFFA49F94),
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(10),
       ),
     );
     return Container(
@@ -87,6 +87,10 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
 
   EventDecoration _eventDecorationBuilder(DateTime date) {
     bool isSunday = date.weekday == 7;
+    bool isToday = (date.day == DateTime.now().day) &&
+        (date.month == DateTime.now().month) &&
+        (date.year == DateTime.now().year);
+
     List<DateTime> eventsDates =
         widget.events?.map<DateTime>((Event e) => e.date)?.toList();
     bool isEventDate = eventsDates?.any((DateTime d) =>
@@ -96,14 +100,24 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
         false;
 
     BoxDecoration eventBox = BoxDecoration(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      borderRadius: BorderRadius.circular(10),
+      shape: BoxShape.circle,
+      color: isToday
+          ? Colors.purple[100]
+          : isSunday ? Colors.red[100] : Colors.cyan[100],
     );
-    TextStyle sundayText = TextStyle(color: Colors.red);
+
+    TextStyle eventText = TextStyle(
+      color: isToday
+          ? Colors.purple[300]
+          : isSunday ? Colors.red[300] : Colors.cyan,
+      decoration: TextDecoration.underline,
+    );
 
     return EventDecoration(
       boxDecoration: isEventDate ? eventBox : null,
-      textStyle: isSunday ? sundayText : null,
+      textStyle: isEventDate
+          ? eventText
+          : isSunday ? TextStyle(color: Colors.red[300]) : null,
     );
   }
 }

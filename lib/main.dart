@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:rfidgateway/pages/clothEnquiry.dart';
 
 import 'language/translation/application.dart';
 import 'language/translation/localization.dart';
@@ -83,6 +84,7 @@ class _MyAppState extends State<MyApp> {
             '/staff': (BuildContext context) => new StaffPage(),
             '/service_provider': (BuildContext context) =>
                 new ServiceProviderPage(),
+            '/cloth_enquiry': (BuildContext context) => new ClothEnquiryPage(),
           },
         ),
       ),

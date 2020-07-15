@@ -56,7 +56,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/video/rfid_homepage.mp4
-    - assets/cloth_icon/
     - assets/i18n/
     - assets/image/boxland.png
   # To add assets to your application, add an assets section, like this:
@@ -84,5 +83,13 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: ClothIcons
+      fonts:
+        - asset: assets/cloth_icon/iconfont.ttf
+
+    - family: SemiBold
+      fonts:
+        - asset: assets/font_family/SourceSerifPro-SemiBold.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,30 +1,13 @@
+import 'dart:math';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
 import 'scanConfirm.dart';
-
-BoxDecoration buttonBox = BoxDecoration(
-  borderRadius: BorderRadius.circular(10),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.grey,
-      offset: Offset(1.0, 1.0),
-      blurRadius: 10.0,
-      spreadRadius: 2.0,
-    )
-  ],
-  gradient: LinearGradient(
-    colors: [
-      Color(0XFFA49F94),
-      Colors.grey[300],
-    ],
-    begin: Alignment.bottomLeft,
-    end: Alignment.topRight,
-  ),
-);
 
 class ServiceProviderPage extends StatefulWidget {
   @override
@@ -47,7 +30,8 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    double screenRadio = width / 961.5;
+    double screenRadio = [width / 960, height / 552].reduce(min);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -69,6 +53,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
             );
           },
         ),
+        actions: [
+          LanguageSetting(),
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -133,10 +120,33 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                   child: Container(
                     width: width * 0.4,
                     height: height * 0.1,
-                    decoration: buttonBox,
+                    decoration: (dropdownValue != null)
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(1.0, 1.0),
+                                blurRadius: 10.0,
+                                spreadRadius: 2.0,
+                              )
+                            ],
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0XFF817E7E),
+                                Color(0XFFBBB8B0),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          )
+                        : BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                    alignment: Alignment.center,
                     child: Text(
                       '${Translations.of(context).text("Scan")}',
-                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.white, fontSize: 40 * screenRadio),
                     ),

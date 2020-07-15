@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'translation/application.dart';
@@ -18,7 +20,7 @@ class _LanguageSettingState extends State<LanguageSetting> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    double screenRadio = width / 961.5;
+    double screenRadio = [width / 960, height / 552].reduce(min);
 
     Container _languageSettingButtonBulder(String language, String lanCode) {
       return Container(

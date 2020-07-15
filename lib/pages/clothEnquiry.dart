@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../calendar/dayPickerForEnquiry.dart' as dpe;
 import '../calendar/event.dart';
+import '../clothIcon.dart';
+import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
 
 class ClothEnquiryPage extends StatefulWidget {
@@ -38,10 +42,17 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    double screenRadio = width / 961.5;
+    double screenRadio = [width / 960, height / 552].reduce(min);
 
     Container _staffClothCardBuilder(
         String variety, int loan, int wash, int use) {
+      IconData cloth = (variety == "T-shirt")
+          ? ClothIcons.Tshirt
+          : (variety == "Trousers")
+              ? ClothIcons.Trousers
+              : (variety == "Jacket")
+                  ? ClothIcons.Jacket
+                  : ClothIcons.Accessories;
       return Container(
         width: width * 0.3,
         height: height * 0.18,
@@ -50,24 +61,20 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
           color: Colors.white,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
-              width: 75 * screenRadio,
-              height: 75 * screenRadio,
               alignment: Alignment.center,
-              margin: EdgeInsets.all(10 * screenRadio),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+              child: Icon(
+                cloth,
                 color: Theme.of(context).primaryColor,
-              ),
-              child: Image.asset(
-                'assets/cloth_icon/$variety.png',
-                width: 50 * screenRadio,
+                size: 60 * screenRadio,
               ),
             ),
             Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '${Translations.of(context).text("Loan")}' +
@@ -77,7 +84,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         fontSize: 20 * screenRadio),
                   ),
                   Text(
-                    '${Translations.of(context).text("Wash")}' +
+                    '${Translations.of(context).text("Laundry")}' +
                         ": ${wash.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
@@ -92,6 +99,69 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Container _eventBoardBuilder() {
+      String time = formatDate(event.date, [HH, ':', nn]);
+      Color bgColor;
+      Color txColor;
+      if ((event.date.day == DateTime.now().day) &&
+          (event.date.month == DateTime.now().month) &&
+          (event.date.year == DateTime.now().year)) {
+        bgColor = Colors.purple[50];
+        txColor = Colors.purple[200];
+      } else if (event.date.weekday == 7) {
+        bgColor = Colors.red[50];
+        txColor = Colors.red[300];
+      } else {
+        bgColor = Colors.cyan[50];
+        txColor = Colors.cyan[300];
+      }
+      return Container(
+        width: width * 0.65,
+        height: height * 0.28,
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(20 * screenRadio),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: bgColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  date,
+                  style: TextStyle(color: txColor, fontSize: 40 * screenRadio),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 15 * screenRadio),
+                      child: Icon(
+                        Icons.attachment,
+                        color: txColor,
+                        size: 40 * screenRadio,
+                      ),
+                    ),
+                    Text(
+                      event.dis,
+                      style:
+                          TextStyle(color: txColor, fontSize: 20 * screenRadio),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              time,
+              style: TextStyle(color: txColor, fontSize: 80 * screenRadio),
             ),
           ],
         ),
@@ -117,6 +187,9 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
             );
           },
         ),
+        actions: [
+          LanguageSetting(),
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -136,7 +209,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: width * 0.01,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).cardColor,
                         ),
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
@@ -167,33 +240,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                       ),
                     ),
                     isEventDate
-                        ? Container(
-                            width: width * 0.65,
-                            height: height * 0.28,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  date,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20 * screenRadio,
-                                  ),
-                                ),
-                                Text(
-                                  event.dis,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20 * screenRadio,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                        ? _eventBoardBuilder()
                         : Container(
                             width: width * 0.65,
                             height: height * 0.28,

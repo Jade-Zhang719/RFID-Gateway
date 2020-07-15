@@ -1,34 +1,17 @@
+import 'dart:math';
+
 import 'package:chewie/chewie.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rfidgateway/clothIcon.dart';
 import 'package:video_player/video_player.dart';
 
 import '../calendar/dayPickerForHome.dart' as dph;
 import '../calendar/event.dart';
+import '../clothIcon.dart';
 import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
-
-BoxDecoration buttonBox = BoxDecoration(
-  borderRadius: BorderRadius.circular(10),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.grey,
-      offset: Offset(1.0, 1.0),
-      blurRadius: 10.0,
-      spreadRadius: 2.0,
-    )
-  ],
-  gradient: LinearGradient(
-    colors: [
-      Color(0XFFA49F94),
-      Color(0XFFA49F94),
-      Colors.grey[400],
-    ],
-    begin: Alignment.bottomLeft,
-    end: Alignment.topRight,
-  ),
-);
 
 class HomePage extends StatefulWidget {
   @override
@@ -71,9 +54,30 @@ class _HomePageState extends State<HomePage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    double screenRadio = width / 961.5;
+    double screenRadio = [width / 960, height / 552].reduce(min);
 
-    Container _stockCardBuilder(String variety, int loan, int wash, int stock) {
+    BoxDecoration buttonBox = BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey,
+          offset: Offset(1.0, 1.0),
+          blurRadius: 10.0,
+          spreadRadius: 2.0,
+        )
+      ],
+      gradient: LinearGradient(
+        colors: [
+          Color(0XFF817E7E),
+          Color(0XFFBBB8B0),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    );
+
+    Container _stockCardBuilder(
+        IconData variety, int wash, int loan, int stock) {
       double loanPercent = loan / (loan + wash + stock) * 100;
       double washPercent = wash / (loan + wash + stock) * 100;
       double stockPercent = stock / (loan + wash + stock) * 100;
@@ -86,24 +90,22 @@ class _HomePageState extends State<HomePage> {
             BoxShadow(
               color: Colors.grey,
               offset: Offset(1.0, 1.0),
+              blurRadius: 10.0,
+              spreadRadius: 2.0,
             )
           ],
           color: Colors.white,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              width: width * 0.03,
-              height: height * 0.07,
+              width: width * 0.05,
               alignment: Alignment.center,
-              margin: EdgeInsets.all(height * 0.005 * screenRadio),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+              child: Icon(
+                variety,
                 color: Color(0XFFA49F94),
-              ),
-              child: Image.asset(
-                'assets/cloth_icon/$variety.png',
-                width: 30 * screenRadio,
+                size: 25 * screenRadio,
               ),
             ),
             Container(
@@ -113,10 +115,21 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     width: width * 0.36,
                     height: height * 0.03,
-                    margin: EdgeInsets.symmetric(horizontal: width * 0.01),
                     child: Flex(
                       direction: Axis.horizontal,
                       children: [
+                        Expanded(
+                          flex: stockPercent.floor(),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              stockPercent.toStringAsFixed(1) + "%",
+                              style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontSize: 15 * screenRadio),
+                            ),
+                          ),
+                        ),
                         Expanded(
                           flex: loanPercent.floor(),
                           child: Container(
@@ -124,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               loanPercent.toStringAsFixed(1) + "%",
                               style: TextStyle(
-                                  color: Colors.cyan[300],
+                                  color: Colors.purple[200],
                                   fontSize: 15 * screenRadio),
                             ),
                           ),
@@ -136,19 +149,7 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               washPercent.toStringAsFixed(1) + "%",
                               style: TextStyle(
-                                  color: Colors.purple[200],
-                                  fontSize: 15 * screenRadio),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: stockPercent.floor(),
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              stockPercent.toStringAsFixed(1) + "%",
-                              style: TextStyle(
-                                  color: Colors.red[200],
+                                  color: Colors.cyan[300],
                                   fontSize: 15 * screenRadio),
                             ),
                           ),
@@ -164,21 +165,21 @@ class _HomePageState extends State<HomePage> {
                       direction: Axis.horizontal,
                       children: [
                         Expanded(
-                          flex: loanPercent.floor(),
+                          flex: stockPercent.floor(),
                           child: Container(
-                            color: Colors.cyan[100],
+                            color: Colors.red[100],
                           ),
                         ),
                         Expanded(
-                          flex: washPercent.floor(),
+                          flex: loanPercent.floor(),
                           child: Container(
                             color: Colors.purple[100],
                           ),
                         ),
                         Expanded(
-                          flex: stockPercent.floor(),
+                          flex: washPercent.floor(),
                           child: Container(
-                            color: Colors.red[100],
+                            color: Colors.cyan[100],
                           ),
                         ),
                       ],
@@ -194,21 +195,15 @@ class _HomePageState extends State<HomePage> {
 
     Container _stockTotalColumnBuilder(String status, int count) {
       Color txColor;
-      if (status == "Loan")
+      if (status == "Laundry")
         txColor = Colors.cyan[300];
-      else if (status == "Wash")
+      else if (status == "Loan")
         txColor = Colors.purple[200];
       else
         txColor = Colors.red[200];
       return Container(
         child: Column(
           children: [
-            Center(
-              child: Text(
-                '${Translations.of(context).text(status)}',
-                style: TextStyle(color: txColor, fontSize: 15 * screenRadio),
-              ),
-            ),
             Container(
               height: 50 * screenRadio,
               width: 50 * screenRadio,
@@ -222,6 +217,75 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(color: txColor, fontSize: 20 * screenRadio),
               ),
             ),
+            Center(
+              child: Text(
+                '${Translations.of(context).text(status)}',
+                style: TextStyle(color: txColor, fontSize: 15 * screenRadio),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Container _eventCardBuilder(Event e) {
+      String date = formatDate(e.date, [mm, "-", dd]);
+      String time = formatDate(e.date, [HH, ':', nn]);
+      Color bgColor;
+      Color txColor;
+      if ((e.date.day == DateTime.now().day) &&
+          (e.date.month == DateTime.now().month) &&
+          (e.date.year == DateTime.now().year)) {
+        bgColor = Colors.purple[50];
+        txColor = Colors.purple[200];
+      } else if (e.date.weekday == 7) {
+        bgColor = Colors.red[50];
+        txColor = Colors.red[300];
+      } else {
+        bgColor = Colors.cyan[50];
+        txColor = Colors.cyan[300];
+      }
+
+      return Container(
+        margin: EdgeInsets.only(top: height * 0.01),
+        padding: EdgeInsets.all(5 * screenRadio),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: bgColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  date,
+                  style: TextStyle(color: txColor, fontSize: 12 * screenRadio),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 3 * screenRadio),
+                      child: Icon(
+                        Icons.attachment,
+                        color: txColor,
+                        size: 10 * screenRadio,
+                      ),
+                    ),
+                    Text(
+                      e.dis,
+                      style:
+                          TextStyle(color: txColor, fontSize: 8 * screenRadio),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              time,
+              style: TextStyle(color: txColor, fontSize: 20 * screenRadio),
+            ),
           ],
         ),
       );
@@ -229,7 +293,9 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${Translations.of(context).text("Home")}'),
+        title: Text(
+          '${Translations.of(context).text("Home")}',
+        ),
         actions: [
           LanguageSetting(),
         ],
@@ -276,6 +342,7 @@ class _HomePageState extends State<HomePage> {
                             margin:
                                 EdgeInsets.symmetric(vertical: height * 0.01),
                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
@@ -310,7 +377,10 @@ class _HomePageState extends State<HomePage> {
                                 Container(
                                   width: width * 0.15,
                                   height: height * 0.05,
-                                  color: Color(0XFFA49F94),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Color(0XFFA49F94),
+                                  ),
                                   alignment: Alignment.center,
                                   child: Text(
                                     '${Translations.of(context).text("Event Menu")}',
@@ -326,82 +396,7 @@ class _HomePageState extends State<HomePage> {
                                       itemCount: events.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        return Container(
-                                          margin: EdgeInsets.only(
-                                              top: height * 0.01),
-                                          padding:
-                                              EdgeInsets.all(5 * screenRadio),
-                                          color: ((events[index].date.day ==
-                                                      DateTime.now().day) &&
-                                                  (events[index].date.month ==
-                                                      DateTime.now().month) &&
-                                                  (events[index].date.year ==
-                                                      DateTime.now().year))
-                                              ? Colors.purple[50]
-                                              : (events[index].date.weekday ==
-                                                      7)
-                                                  ? Colors.red[50]
-                                                  : Colors.cyan[50],
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                formatDate(events[index].date,
-                                                    [yyyy, "-", mm, "-", dd]),
-                                                style: TextStyle(
-                                                    color: ((events[index]
-                                                                    .date
-                                                                    .day ==
-                                                                DateTime.now()
-                                                                    .day) &&
-                                                            (events[index]
-                                                                    .date
-                                                                    .month ==
-                                                                DateTime.now()
-                                                                    .month) &&
-                                                            (events[index]
-                                                                    .date
-                                                                    .year ==
-                                                                DateTime.now()
-                                                                    .year))
-                                                        ? Colors.purple[200]
-                                                        : (events[index]
-                                                                    .date
-                                                                    .weekday ==
-                                                                7)
-                                                            ? Colors.red[300]
-                                                            : Colors.cyan[300],
-                                                    fontSize: 10 * screenRadio),
-                                              ),
-                                              Text(
-                                                events[index].dis,
-                                                style: TextStyle(
-                                                    color: ((events[index]
-                                                                    .date
-                                                                    .day ==
-                                                                DateTime.now()
-                                                                    .day) &&
-                                                            (events[index]
-                                                                    .date
-                                                                    .month ==
-                                                                DateTime.now()
-                                                                    .month) &&
-                                                            (events[index]
-                                                                    .date
-                                                                    .year ==
-                                                                DateTime.now()
-                                                                    .year))
-                                                        ? Colors.purple[200]
-                                                        : (events[index]
-                                                                    .date
-                                                                    .weekday ==
-                                                                7)
-                                                            ? Colors.red[300]
-                                                            : Colors.cyan[300],
-                                                    fontSize: 10 * screenRadio),
-                                              ),
-                                            ],
-                                          ),
-                                        );
+                                        return _eventCardBuilder(events[index]);
                                       }),
                                 ),
                               ],
@@ -429,37 +424,31 @@ class _HomePageState extends State<HomePage> {
                       ),
                       padding: EdgeInsets.all(width * 0.01),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Container(
                             height: height * 0.35,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _stockCardBuilder("T-shirt", 40, 25, 75),
-                                _stockCardBuilder("Trousers", 50, 20, 80),
-                                _stockCardBuilder("Jacket", 25, 30, 95),
-                                _stockCardBuilder("Accessories", 75, 45, 180),
+                                _stockCardBuilder(
+                                    ClothIcons.Tshirt, 40, 25, 75),
+                                _stockCardBuilder(
+                                    ClothIcons.Trousers, 50, 20, 80),
+                                _stockCardBuilder(
+                                    ClothIcons.Jacket, 25, 30, 95),
+                                _stockCardBuilder(
+                                    ClothIcons.Accessories, 75, 45, 180),
                               ],
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: height * 0.02),
-                            alignment: Alignment.center,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '${Translations.of(context).text("Total:")}',
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 20 * screenRadio),
-                                  ),
-                                ),
-                                _stockTotalColumnBuilder("Loan", 200),
-                                _stockTotalColumnBuilder("Wash", 160),
                                 _stockTotalColumnBuilder("Stock", 390),
+                                _stockTotalColumnBuilder("Loan", 160),
+                                _stockTotalColumnBuilder("Laundry", 200),
                               ],
                             ),
                           ),
@@ -555,7 +544,7 @@ class _HomePageState extends State<HomePage> {
 
 final List<Event> events = [
   Event(DateTime.now(), "Today event"),
-  Event(DateTime.now().subtract(Duration(days: 2)), "Ev1"),
+  Event(DateTime.now().subtract(Duration(days: 3)), "Ev1"),
   Event(DateTime.now().subtract(Duration(days: 13)), "Ev2"),
   Event(DateTime.now().subtract(Duration(days: 30)), "Ev3"),
   Event(DateTime.now().add(Duration(days: 3)), "Ev4"),

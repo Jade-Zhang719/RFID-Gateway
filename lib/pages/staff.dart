@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
+import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
 
 class StaffPage extends StatefulWidget {
@@ -25,7 +28,7 @@ class _StaffPageState extends State<StaffPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    double screenRadio = width / 961.5;
+    double screenRadio = [width / 960, height / 552].reduce(min);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,6 +49,26 @@ class _StaffPageState extends State<StaffPage> {
             );
           },
         ),
+        actions: [
+          LanguageSetting(),
+          FlatButton(
+            padding: EdgeInsets.all(0),
+            child: Container(
+              alignment: Alignment.center,
+              color: Colors.transparent,
+              child: Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/cloth_enquiry',
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Center(

@@ -93,15 +93,15 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
       widget.onDateChange(_selectedDate);
       dismissAllToast();
       if (isEventDate) {
-        Event event;
-        widget.events.forEach((element) {
-          DateTime d = element.date;
-          if (newDate.year == d.year &&
-              newDate.month == d.month &&
-              newDate.day == d.day) {
-            event = element;
-          }
-        });
+        // Event event;
+        // widget.events.forEach((element) {
+        //   DateTime d = element.date;
+        //   if (newDate.year == d.year &&
+        //       newDate.month == d.month &&
+        //       newDate.day == d.day) {
+        //     event = element;
+        //   }
+        // });
 
         // showToastWidget(
         //   Row(

@@ -25,9 +25,9 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
   int itemType;
 
   dynamic scannedProduct;
-  List scannedEpcs = [];
+  List scannedEpcs;
 
-  RFIDHub _rfidHub;
+  RFIDHub _rfidHub = RFIDHub();
 
   // ignore: cancel_subscriptions
   StreamSubscription<Object> _subscription;
@@ -44,16 +44,18 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
+    print("************ Scan Confirm Page ************");
     orderNo = widget.orderNo;
     itemType = 2;
     scannedEpcs = [];
-    _rfidHub = RFIDHub();
+
     super.initState();
   }
 
   @override
   void didUpdateWidget(ScanConfirmPage oldWidget) {
     orderNo = widget.orderNo;
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -446,8 +448,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                     width: width * 0.2,
                     height: height * 0.1,
                     child: Text(
-                      '${Translations.of(context).text("Total:")}' +
-                          scannedEpcs.length.toString(),
+                      '${Translations.of(context).text("Total:")}${scannedEpcs.length.toString()}',
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 30 * screenRadio),
@@ -459,7 +460,13 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                       width: width * 0.2,
                       height: height * 0.1,
                       alignment: Alignment.center,
-                      decoration: buttonBox,
+                      decoration: (this._rfidHub.getConnectionState() ==
+                              HubConnectionState.Disconnected)
+                          ? buttonBox
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey,
+                            ),
                       child: Text(
                         '${Translations.of(context).text("Scan")}',
                         style: TextStyle(
@@ -474,49 +481,50 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                               if (this._rfidHub.getConnectionState() ==
                                   HubConnectionState.Connected) {
                                 print(this._rfidHub.getConnectionState());
-                                setState(() {
-                                  this
+
+                                this
+                                    ._rfidHub
+                                    .trayListener((List<Object> results) {
+                                  print("Tray: $results");
+                                  this._subscription = this
                                       ._rfidHub
-                                      .trayListener((List<Object> results) {
-                                    print("Tray: $results");
-                                    this._subscription = this
-                                        ._rfidHub
-                                        .streamProducts()
-                                        .listen((epc) async {
-                                      if (epc is Map) {
-                                        String epcString = epc['epc']
-                                            .toString()
-                                            .replaceAll(" ", "");
+                                      .streamProducts()
+                                      .listen((epc) async {
+                                    if (epc is Map) {
+                                      String epcString = epc['epc']
+                                          .toString()
+                                          .replaceAll(" ", "");
 
-                                        bool alreadyAdd = false;
+                                      bool alreadyAdd = false;
 
-                                        for (String e in this.scannedEpcs) {
-                                          if (e == epcString) {
-                                            alreadyAdd = true;
-                                            break;
-                                          }
+                                      for (String e in this.scannedEpcs) {
+                                        if (e == epcString) {
+                                          alreadyAdd = true;
+                                          break;
                                         }
-
+                                      }
+                                      setState(() {
                                         if (!alreadyAdd && epc["active"] == 1) {
                                           this.scannedEpcs.add(epcString);
-                                          // print(epc);
-                                          // print("Scanned Epcs: ${this.scannedEpcs}");
-                                          // print("Already Added: $alreadyAdd");
+                                          alreadyAdd = true;
+                                          print(epc);
+                                          print(
+                                              "Scanned Epcs: ${this.scannedEpcs}");
                                         }
+                                      });
 
-                                        // if (!alreadyAdd && epc['active'] == 1) {
-                                        //   await this.addEpcProductReceived(epcString);
-                                        //   print("Already Added: ${this.scannedEpcs}");
-                                        // }
+                                      // if (!alreadyAdd && epc['active'] == 1) {
+                                      //   await this.addEpcProductReceived(epcString);
+                                      //   print("Already Added: ${this.scannedEpcs}");
+                                      // }
 
-                                        // if (alreadyAdd && epc['active'] == 1) {
-                                        //   this.removeEpcProductsInTray(epcString);
-                                        // }
-                                      }
-                                    });
+                                      // if (alreadyAdd && epc['active'] == 1) {
+                                      //   this.removeEpcProductsInTray(epcString);
+                                      // }
+                                    }
                                   });
-                                  this._rfidHub.associateMobileDevice();
                                 });
+                                this._rfidHub.associateMobileDevice();
                               }
                             });
                           },
@@ -527,7 +535,13 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                       width: width * 0.2,
                       height: height * 0.1,
                       alignment: Alignment.center,
-                      decoration: buttonBox,
+                      decoration: (this._rfidHub.getConnectionState() ==
+                              HubConnectionState.Connected)
+                          ? buttonBox
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey,
+                            ),
                       child: Text(
                         '${Translations.of(context).text("Reset")}',
                         style: TextStyle(
@@ -539,7 +553,6 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                         ? () async {
                             await _rfidHub.disconnect();
                             print(this._rfidHub.getConnectionState());
-
                             setState(() {
                               scannedEpcs.clear();
                             });
@@ -645,6 +658,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                               onPressed: () async {
                                                 await showGeneralDialog(
                                                     context: context,
+                                                    // ignore: missing_return
                                                     pageBuilder: (context,
                                                         anim1, anim2) {},
                                                     barrierColor: Colors.grey

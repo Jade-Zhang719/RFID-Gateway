@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:oktoast/oktoast.dart';
 
 import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
@@ -22,7 +21,8 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
-    dismissAllToast();
+    // dismissAllToast();
+    print("************ Service Provider Page ************");
     super.initState();
   }
 
@@ -91,6 +91,8 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                           onChanged: (String newValue) {
                             setState(() {
                               dropdownValue = newValue;
+                              print(
+                                  "The selected order number is $dropdownValue.");
                             });
                           },
                           underline: Container(),

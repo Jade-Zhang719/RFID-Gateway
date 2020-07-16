@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../language/languageSetting.dart';
@@ -20,7 +19,9 @@ class _StaffPageState extends State<StaffPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
-    dismissAllToast();
+
+    // dismissAllToast();
+    print("************ Staff Page ************");
     super.initState();
   }
 

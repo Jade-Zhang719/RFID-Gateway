@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Config {
   static final String cctvUrl = "http://192.168.0.4:5556/rfids";
-  static final String rfidUrl = "http://192.168.0.4:5556/rfids";
-  static final String mobileDeviceId = "826bead5-7b6b-4895-8b7e-9671f0928f7f";
+  static final String rfidUrl = "http://192.168.0.17:5556/rfids";
+  static final String mobileDeviceId = "6B584352-788D-4D74-8AD4-27479DFD8F62";
 }
 
 class DBConfig {

@@ -81,7 +81,7 @@ class DayBasedPicker<T> extends StatelessWidget with CommonDatePickerFunctions {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
+    // final ThemeData themeData = Theme.of(context);
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
     final int year = displayedMonth.year;

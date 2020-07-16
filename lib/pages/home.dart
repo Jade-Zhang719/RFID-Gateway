@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    print("************ Home Page ************");
     _videoPlayerController =
         VideoPlayerController.asset('assets/video/rfid_homepage.mp4');
     _chewieController = ChewieController(

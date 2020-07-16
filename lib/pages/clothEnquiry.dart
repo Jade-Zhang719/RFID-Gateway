@@ -29,7 +29,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
     });
 
     isEventDate = false;
-    print("_ClothEnquiryPageState");
+    print("************ Cloth Enquiry Page ************");
     super.initState();
   }
 

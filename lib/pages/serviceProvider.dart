@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rfidgateway/api.dart';
 
 import '../language/languageSetting.dart';
 import '../language/translation/localization.dart';
@@ -15,13 +16,21 @@ class ServiceProviderPage extends StatefulWidget {
 
 class _ServiceProviderPageState extends State<ServiceProviderPage> {
   String dropdownValue;
-  List<String> orders = ["1", "2", "3", "4"];
+  List<String> orders = [];
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
     // dismissAllToast();
+
+    createStockTransfer().then((value) {
+      setState(() {
+        value.stockTransfer.forEach((element) {
+          orders.add(element.toString());
+        });
+      });
+    });
     print("************ Service Provider Page ************");
     super.initState();
   }
@@ -101,7 +110,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                             return DropdownMenuItem<String>(
                               value: order,
                               child: Container(
-                                width: width * 0.4,
+                                width: width * 0.3,
                                 alignment: Alignment.center,
                                 child: Text(
                                   order,
@@ -148,7 +157,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                           ),
                     alignment: Alignment.center,
                     child: Text(
-                      '${Translations.of(context).text("Start")}',
+                      '${Translations.of(context).text("Scan")}',
                       style: TextStyle(
                           color: Colors.white, fontSize: 40 * screenRadio),
                     ),
@@ -157,7 +166,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                       ? () {
                           EasyLoading.show(
                               status:
-                                  '${Translations.of(context).text("loading...")}');
+                                  '${Translations.of(context).text("Loading...")}');
                           Navigator.push(
                             context,
                             new MaterialPageRoute(

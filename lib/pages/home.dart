@@ -488,7 +488,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () {
                               EasyLoading.show(
                                   status:
-                                      '${Translations.of(context).text("loading...")}');
+                                      '${Translations.of(context).text("Loading...")}');
                               Navigator.pushNamed(
                                 context,
                                 '/staff',
@@ -522,7 +522,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () {
                               EasyLoading.show(
                                   status:
-                                      '${Translations.of(context).text("loading...")}');
+                                      '${Translations.of(context).text("Loading...")}');
                               Navigator.pushNamed(
                                 context,
                                 '/service_provider',

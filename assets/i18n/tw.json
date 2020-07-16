@@ -1,6 +1,4 @@
 {
-    "loading...": "載入中...",
-
     "Home": "主頁",
     "Event Menu": "事件列表",
 
@@ -11,8 +9,9 @@
 
     "Service Provider": "服務提供",
     "Please Select the Order Number": "請選擇訂單號",
-    "Start": "開始",
     "Scan": "掃描",
+    "Start": "開始",
+    "Stop": "停止",
     "Reset": "重置",
     "Cloth Scan -- Order No:": "服裝掃描 -- 訂單號: ",
     "Signature": "簽名",
@@ -35,5 +34,8 @@
     "Laundry": "清洗中",
     "Stock": "庫存",
     "In use": "使用中",
-    "Total:": "總計:"
+    "Total:": "總計:",
+
+    "Loading...": "載入中...",
+    "Scanning...": "掃描中..."
 }

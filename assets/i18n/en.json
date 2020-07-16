@@ -1,6 +1,4 @@
 {
-    "loading...": "loading...",
-
     "Home": "Home",
     "Event Menu": "Event Menu",
 
@@ -11,8 +9,9 @@
 
     "Service Provider": "Service Provider",
     "Please Select the Order Number": "Please Select the Order Number",
-    "Start": "Start",
     "Scan": "Scan",
+    "Start": "Start",
+    "Stop": "Stop",
     "Reset": "Reset",
     "Cloth Scan -- Order No:": "Cloth Scan -- Order No: ",
     "Signature": "Signature",
@@ -35,5 +34,8 @@
     "Laundry": "Laundry",
     "Stock": "Stock",
     "In use": "In use",
-    "Total:": "Total: "
+    "Total:": "Total: ",
+
+    "Loading...": "Loading...",
+    "Scanning...": "Scanning..."
 }

@@ -5,6 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hand_signature/signature.dart';
+import 'package:rfidgateway/api.dart';
 import 'package:signalr_client/hub_connection.dart';
 
 import '../clothIcon.dart';
@@ -22,10 +23,13 @@ class ScanConfirmPage extends StatefulWidget {
 
 class _ScanConfirmPageState extends State<ScanConfirmPage> {
   String orderNo;
+  List<Order> orderedCloths = [];
+  List<Product> scannedCloths = [];
+
   int itemType;
 
   dynamic scannedProduct;
-  List scannedEpcs;
+  List scannedEpcs = [];
 
   RFIDHub _rfidHub = RFIDHub();
 
@@ -44,11 +48,19 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       EasyLoading.dismiss();
     });
-    print("************ Scan Confirm Page ************");
+
     orderNo = widget.orderNo;
     itemType = 2;
-    scannedEpcs = [];
 
+    createOrder(orderNo).then((value) {
+      if (value != null) {
+        setState(() {
+          orderedCloths = value;
+        });
+      }
+    });
+
+    print("************ Scan Confirm Page ************");
     super.initState();
   }
 
@@ -460,23 +472,22 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                       width: width * 0.2,
                       height: height * 0.1,
                       alignment: Alignment.center,
-                      decoration: (this._rfidHub.getConnectionState() ==
-                              HubConnectionState.Disconnected)
-                          ? buttonBox
-                          : BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
-                            ),
+                      decoration: buttonBox,
                       child: Text(
-                        '${Translations.of(context).text("Scan")}',
+                        (this._rfidHub.getConnectionState() ==
+                                HubConnectionState.Disconnected)
+                            ? '${Translations.of(context).text("Start")}'
+                            : '${Translations.of(context).text("Stop")}',
                         style: TextStyle(
                             color: Colors.white, fontSize: 30 * screenRadio),
                       ),
                     ),
                     onPressed: (this._rfidHub.getConnectionState() ==
-                            HubConnectionState.Connected)
-                        ? null
-                        : () async {
+                            HubConnectionState.Disconnected)
+                        ? () async {
+                            EasyLoading.show(
+                                status:
+                                    '${Translations.of(context).text("Scanning...")}');
                             await this._rfidHub.connect().then((value) {
                               if (this._rfidHub.getConnectionState() ==
                                   HubConnectionState.Connected) {
@@ -485,7 +496,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                 this
                                     ._rfidHub
                                     .trayListener((List<Object> results) {
-                                  print("Tray: $results");
+                                  // print("Tray: $results");
                                   this._subscription = this
                                       ._rfidHub
                                       .streamProducts()
@@ -495,38 +506,64 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                           .toString()
                                           .replaceAll(" ", "");
 
-                                      bool alreadyAdd = false;
-
+                                      bool alreadyAddEpc = false;
                                       for (String e in this.scannedEpcs) {
                                         if (e == epcString) {
-                                          alreadyAdd = true;
+                                          alreadyAddEpc = true;
                                           break;
                                         }
                                       }
-                                      setState(() {
-                                        if (!alreadyAdd && epc["active"] == 1) {
-                                          this.scannedEpcs.add(epcString);
-                                          alreadyAdd = true;
-                                          print(epc);
-                                          print(
-                                              "Scanned Epcs: ${this.scannedEpcs}");
-                                        }
-                                      });
+                                      if (!alreadyAddEpc &&
+                                          epc["active"] == 1) {
+                                        this.scannedEpcs.add(epcString);
+                                        alreadyAddEpc = true;
+                                        print(
+                                            "Scanned Epcs: ${this.scannedEpcs}");
 
-                                      // if (!alreadyAdd && epc['active'] == 1) {
-                                      //   await this.addEpcProductReceived(epcString);
-                                      //   print("Already Added: ${this.scannedEpcs}");
-                                      // }
-
-                                      // if (alreadyAdd && epc['active'] == 1) {
-                                      //   this.removeEpcProductsInTray(epcString);
-                                      // }
+                                        setState(() {});
+                                      }
+                                      // scannedEpcs.forEach((element) async {
+                                      //   if (!alreadyAdd) {
+                                      //     await createProduct(element)
+                                      //         .then((value) {
+                                      //       if (value != null) {
+                                      //         scannedCloths.add(value);
+                                      //         print(scannedCloths.length);
+                                      //         print(value.productId);
+                                      //       }
+                                      //     });
+                                      //   }
+                                      // });
                                     }
                                   });
                                 });
                                 this._rfidHub.associateMobileDevice();
                               }
                             });
+                            setState(() {});
+                          }
+                        : () async {
+                            await _rfidHub.disconnect();
+                            print(this._rfidHub.getConnectionState());
+
+                            for (String e in this.scannedEpcs) {
+                              bool alreadyAddProduct = false;
+                              for (Product p in scannedCloths) {
+                                if (e == p.epc) {
+                                  alreadyAddProduct = true;
+                                  break;
+                                }
+                              }
+                              if (!alreadyAddProduct) {
+                                await createProduct(e).then((value) {
+                                  if (value != null) {
+                                    scannedCloths.add(value);
+                                  }
+                                });
+                              }
+                            }
+                            setState(() {});
+                            EasyLoading.dismiss();
                           },
                   ),
                   FlatButton(
@@ -535,12 +572,13 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                       width: width * 0.2,
                       height: height * 0.1,
                       alignment: Alignment.center,
-                      decoration: (this._rfidHub.getConnectionState() ==
-                              HubConnectionState.Connected)
+                      decoration: (scannedEpcs.isNotEmpty &&
+                              this._rfidHub.getConnectionState() ==
+                                  HubConnectionState.Disconnected)
                           ? buttonBox
                           : BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
+                              color: Theme.of(context).accentColor,
                             ),
                       child: Text(
                         '${Translations.of(context).text("Reset")}',
@@ -548,13 +586,13 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                             color: Colors.white, fontSize: 30 * screenRadio),
                       ),
                     ),
-                    onPressed: (this._rfidHub.getConnectionState() ==
-                            HubConnectionState.Connected)
-                        ? () async {
-                            await _rfidHub.disconnect();
-                            print(this._rfidHub.getConnectionState());
+                    onPressed: (scannedEpcs.isNotEmpty &&
+                            this._rfidHub.getConnectionState() ==
+                                HubConnectionState.Disconnected)
+                        ? () {
                             setState(() {
                               scannedEpcs.clear();
+                              scannedCloths.clear();
                             });
                           }
                         : null,
@@ -770,7 +808,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                                     });
 
                                                 // EasyLoading.show(
-                                                //     status: 'loading...');
+                                                //     status: 'Loading...');
                                                 // rawImage.value =
                                                 //     await control.toImage(
                                                 //   color: Colors.black,

@@ -1,6 +1,4 @@
 {
-    "loading...": "载入中...",
-
     "Home": "主页",
     "Event Menu": "事件列表",
 
@@ -11,8 +9,9 @@
 
     "Service Provider": "服务提供",
     "Please Select the Order Number": "请选择订单号",
-    "Start": "开始",
     "Scan": "扫描",
+    "Start": "开始",
+    "Stop": "停止",
     "Reset": "重置",
     "Cloth Scan -- Order No:": "服装扫描 -- 订单号: ",
     "Signature": "签名",
@@ -35,5 +34,8 @@
     "Laundry": "清洗中",
     "Stock": "库存",
     "In use": "使用中",
-    "Total:": "总计:"
+    "Total:": "总计:",
+
+    "Loading...": "载入中...",
+    "Scanning...": "扫描中..."
 }

@@ -207,7 +207,7 @@ class _StaffPageState extends State<StaffPage> {
                 //             );
                 //           });
 
-                //       EasyLoading.show(status: 'loading...');
+                //       EasyLoading.show(status: 'Loading...');
                 //       Navigator.pushReplacement(
                 //         context,
                 //         new MaterialPageRoute(

@@ -51,7 +51,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
 
     orderNo = widget.orderNo;
     itemType = 2;
-
+    scannedEpcs = [];
     createOrder(orderNo).then((value) {
       if (value != null) {
         setState(() {
@@ -506,22 +506,22 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                                           .toString()
                                           .replaceAll(" ", "");
 
-                                      bool alreadyAddEpc = false;
+                                      bool alreadyAdd = false;
                                       for (String e in this.scannedEpcs) {
                                         if (e == epcString) {
-                                          alreadyAddEpc = true;
+                                          alreadyAdd = true;
                                           break;
                                         }
                                       }
-                                      if (!alreadyAddEpc &&
-                                          epc["active"] == 1) {
-                                        this.scannedEpcs.add(epcString);
-                                        alreadyAddEpc = true;
-                                        print(
-                                            "Scanned Epcs: ${this.scannedEpcs}");
-
-                                        setState(() {});
-                                      }
+                                      setState(() {
+                                        if (!alreadyAdd && epc["active"] == 1) {
+                                          this.scannedEpcs.add(epcString);
+                                          alreadyAdd = true;
+                                          print(epc);
+                                          print(
+                                              "Scanned Epcs: ${this.scannedEpcs}");
+                                        }
+                                      });
                                       // scannedEpcs.forEach((element) async {
                                       //   if (!alreadyAdd) {
                                       //     await createProduct(element)
@@ -544,26 +544,26 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                           }
                         : () async {
                             await _rfidHub.disconnect();
+                            EasyLoading.dismiss();
                             print(this._rfidHub.getConnectionState());
 
-                            for (String e in this.scannedEpcs) {
-                              bool alreadyAddProduct = false;
-                              for (Product p in scannedCloths) {
-                                if (e == p.epc) {
-                                  alreadyAddProduct = true;
-                                  break;
-                                }
-                              }
-                              if (!alreadyAddProduct) {
-                                await createProduct(e).then((value) {
-                                  if (value != null) {
-                                    scannedCloths.add(value);
-                                  }
-                                });
-                              }
-                            }
+                            // for (String e in this.scannedEpcs) {
+                            //   bool alreadyAddProduct = false;
+                            //   for (Product p in scannedCloths) {
+                            //     if (e == p.epc) {
+                            //       alreadyAddProduct = true;
+                            //       break;
+                            //     }
+                            //   }
+                            //   if (!alreadyAddProduct) {
+                            //     await createProduct(e).then((value) {
+                            //       if (value != null) {
+                            //         scannedCloths.add(value);
+                            //       }
+                            //     });
+                            //   }
+                            // }
                             setState(() {});
-                            EasyLoading.dismiss();
                           },
                   ),
                   FlatButton(

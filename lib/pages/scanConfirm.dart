@@ -28,6 +28,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
 
   int itemType;
 
+  bool isStart = false;
   dynamic scannedProduct;
   List scannedEpcs = [];
 
@@ -95,8 +96,11 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
       ],
       gradient: LinearGradient(
         colors: [
-          Color(0XFF817E7E),
-          Color(0XFFBBB8B0),
+          Colors.lightBlue[300],
+          Colors.blueAccent,
+          Colors.blue[300],
+          // Color(0XFF817E7E),
+          // Color(0XFFBBB8B0),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -421,10 +425,10 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _itemBuilder1("T-shirt", 1, Color(0XFFA49F94)),
+                        _itemBuilder1("T-shirt", 1, Colors.indigo[200]),
                         _itemBuilder1(
                             "Trousers", 2, Theme.of(context).accentColor),
-                        _itemBuilder1("Jacket", 3, Color(0XFFA49F94)),
+                        _itemBuilder1("Jacket", 3, Colors.indigo[200]),
                         _itemBuilder1(
                             "Accessories", 4, Theme.of(context).accentColor),
                       ],
@@ -433,10 +437,12 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _itemBuilder2("T-shirt", 1, Color(0XFFA49F94)),
+                            _itemBuilder2("T-shirt", 1, Colors.indigo[200]
+                                // Color(0XFFA49F94)
+                                ),
                             _itemBuilder2(
                                 "Trousers", 2, Theme.of(context).accentColor),
-                            _itemBuilder2("Jacket", 3, Color(0XFFA49F94)),
+                            _itemBuilder2("Jacket", 3, Colors.indigo[200]),
                             _itemBuilder2("Accessories", 4,
                                 Theme.of(context).accentColor),
                           ],
@@ -445,12 +451,12 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                           spacing: width * 0.04,
                           runSpacing: height * 0.05,
                           children: [
-                            _itemBuilder3("T-shirt", 1, Color(0XFFA49F94)),
+                            _itemBuilder3("T-shirt", 1, Colors.indigo[200]),
                             _itemBuilder3(
                                 "Trousers", 2, Theme.of(context).accentColor),
                             _itemBuilder3(
                                 "Jacket", 3, Theme.of(context).accentColor),
-                            _itemBuilder3("Accessories", 4, Color(0XFFA49F94)),
+                            _itemBuilder3("Accessories", 4, Colors.indigo[200]),
                           ],
                         ),
               Row(
@@ -474,20 +480,22 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                       alignment: Alignment.center,
                       decoration: buttonBox,
                       child: Text(
-                        (this._rfidHub.getConnectionState() ==
-                                HubConnectionState.Disconnected)
+                        !isStart
                             ? '${Translations.of(context).text("Start")}'
                             : '${Translations.of(context).text("Stop")}',
                         style: TextStyle(
                             color: Colors.white, fontSize: 30 * screenRadio),
                       ),
                     ),
-                    onPressed: (this._rfidHub.getConnectionState() ==
-                            HubConnectionState.Disconnected)
+                    onPressed: !isStart
                         ? () async {
                             EasyLoading.show(
                                 status:
                                     '${Translations.of(context).text("Scanning...")}');
+                            setState(() {
+                              isStart = !isStart;
+                            });
+
                             await this._rfidHub.connect().then((value) {
                               if (this._rfidHub.getConnectionState() ==
                                   HubConnectionState.Connected) {
@@ -545,6 +553,10 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                         : () async {
                             await _rfidHub.disconnect();
                             EasyLoading.dismiss();
+                            setState(() {
+                              isStart = !isStart;
+                            });
+
                             print(this._rfidHub.getConnectionState());
 
                             // for (String e in this.scannedEpcs) {
@@ -563,7 +575,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                             //     });
                             //   }
                             // }
-                            setState(() {});
+                            //   setState(() {});
                           },
                   ),
                   FlatButton(
@@ -578,7 +590,7 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                           ? buttonBox
                           : BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).accentColor,
+                              color: Colors.grey,
                             ),
                       child: Text(
                         '${Translations.of(context).text("Reset")}',

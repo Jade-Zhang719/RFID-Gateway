@@ -69,8 +69,11 @@ class _HomePageState extends State<HomePage> {
       ],
       gradient: LinearGradient(
         colors: [
-          Color(0XFF817E7E),
-          Color(0XFFBBB8B0),
+          Colors.lightBlue[300],
+          Colors.blueAccent,
+          Colors.blue[300],
+          // Color(0XFF817E7E),
+          // Color(0XFFBBB8B0),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -105,7 +108,7 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.center,
               child: Icon(
                 variety,
-                color: Color(0XFFA49F94),
+                color: Colors.blue,
                 size: 25 * screenRadio,
               ),
             ),
@@ -377,10 +380,10 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Container(
                                   width: width * 0.15,
-                                  height: height * 0.05,
+                                  height: height * 0.045,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
-                                    color: Color(0XFFA49F94),
+                                    color: Colors.blue,
                                   ),
                                   alignment: Alignment.center,
                                   child: Text(

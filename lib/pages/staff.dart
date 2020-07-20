@@ -51,7 +51,6 @@ class _StaffPageState extends State<StaffPage> {
           },
         ),
         actions: [
-          LanguageSetting(),
           FlatButton(
             padding: EdgeInsets.all(0),
             child: Container(
@@ -69,6 +68,7 @@ class _StaffPageState extends State<StaffPage> {
               );
             },
           ),
+          LanguageSetting(),
         ],
       ),
       body: SafeArea(

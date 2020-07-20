@@ -56,7 +56,7 @@ class _CustomDayPickerState extends State<CustomDayPicker> {
       selectedDateStyle: TextStyle(color: Colors.white),
       selectedSingleDateDecoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Color(0XFFA49F94),
+        color: Colors.blue,
       ),
     );
     return Container(

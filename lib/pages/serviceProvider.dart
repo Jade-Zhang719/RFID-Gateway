@@ -19,11 +19,6 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   List<String> orders = [];
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      EasyLoading.dismiss();
-    });
-    // dismissAllToast();
-
     createStockTransfer().then((value) {
       setState(() {
         value.stockTransfer.forEach((element) {
@@ -31,6 +26,10 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
         });
       });
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      EasyLoading.dismiss();
+    });
+    // dismissAllToast();
     print("************ Service Provider Page ************");
     super.initState();
   }
@@ -79,8 +78,8 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                   borderType: BorderType.RRect,
                   radius: Radius.circular(10),
                   child: Container(
-                    width: width * 0.9,
-                    height: height * 0.6,
+                    width: width * 0.6,
+                    height: height * 0.4,
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -144,8 +143,11 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                             ],
                             gradient: LinearGradient(
                               colors: [
-                                Color(0XFF817E7E),
-                                Color(0XFFBBB8B0),
+                                Colors.lightBlue[300],
+                                Colors.blueAccent,
+                                Colors.blue[300],
+                                // Color(0XFF817E7E),
+                                // Color(0XFFBBB8B0),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -159,7 +161,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                     child: Text(
                       '${Translations.of(context).text("Scan")}',
                       style: TextStyle(
-                          color: Colors.white, fontSize: 40 * screenRadio),
+                          color: Colors.white, fontSize: 30 * screenRadio),
                     ),
                   ),
                   onPressed: (dropdownValue != null)

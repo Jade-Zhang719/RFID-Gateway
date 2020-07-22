@@ -145,7 +145,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                       padding: EdgeInsets.all(0),
                       child: Container(
                         width: width * 0.25,
-                        height: height * 0.15,
+                        height: height * 0.18,
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(10 * screenRadio),
                         decoration: BoxDecoration(
@@ -331,89 +331,93 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                     child: ListView.builder(
                         itemCount: orders.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: width * 0.8,
-                            height: height * 0.12,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(10 * screenRadio),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(5.0, 5.0),
-                                  blurRadius: 10.0,
-                                  spreadRadius: 2.0,
-                                )
-                              ],
-                              color: selectValue == orders[index]
-                                  ? Theme.of(context).cardColor
-                                  : Colors.white,
-                            ),
-                            child: Flex(
-                              direction: Axis.horizontal,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5 * screenRadio),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      (index + 1).toString(),
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 15 * screenRadio),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 5,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5 * screenRadio),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      orders[index],
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 15 * screenRadio),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5 * screenRadio),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      Random().nextInt(10).toString(),
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 10 * screenRadio),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5 * screenRadio),
-                                    alignment: Alignment.center,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        selectValue == orders[index]
-                                            ? Icons.check_box
-                                            : Icons.check_box_outline_blank,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 25 * screenRadio,
+                          return FlatButton(
+                            child: Container(
+                              width: width * 0.8,
+                              height: height * 0.1,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10 * screenRadio),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    offset: Offset(5.0, 5.0),
+                                    blurRadius: 10.0,
+                                    spreadRadius: 2.0,
+                                  )
+                                ],
+                                color: selectValue == orders[index]
+                                    ? Theme.of(context).cardColor
+                                    : Colors.white,
+                              ),
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (index + 1).toString(),
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 15 * screenRadio),
                                       ),
-                                      onPressed: () {
-                                        setState(() {
-                                          selectValue = orders[index];
-                                        });
-                                      },
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        orders[index],
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 15 * screenRadio),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        Random().nextInt(10).toString(),
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 15 * screenRadio),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      padding: EdgeInsets.all(5 * screenRadio),
+                                      alignment: Alignment.center,
+                                      child: selectValue == orders[index]
+                                          ? Icon(
+                                              Icons.check_box,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              size: 25 * screenRadio,
+                                            )
+                                          : Container(),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+                            onPressed: () {
+                              setState(() {
+                                selectValue = orders[index];
+                              });
+                            },
                           );
                         }),
                   ),

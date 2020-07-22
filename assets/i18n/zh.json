@@ -5,11 +5,13 @@
     "Staff": "员工",
     "Please Scan Your Staff Card": "请扫描您的员工卡",
     "Cloth Enquiry": "服装查询",
+    "Name:":"姓名: ",
+    "Staff ID:": "职员编号: ",
     "No Record": "没有记录",
 
     "Service Provider": "服务提供",
     "Please Select the Order Number": "请选择订单号",
-    "Scan": "扫描",
+    "Next": "下一步",
     "Start": "开始",
     "Stop": "停止",
     "Reset": "重置",
@@ -34,7 +36,8 @@
     "Laundry": "清洗中",
     "Stock": "库存",
     "In use": "使用中",
-    "Total:": "总计:",
+    "Total Order Qty:": "订单总计: ",
+    "Total Scan Qty:": "扫描总计: ",
 
     "Loading...": "载入中...",
     "Scanning...": "扫描中..."

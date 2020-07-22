@@ -5,11 +5,13 @@
     "Staff": "Staff",
     "Please Scan Your Staff Card": "Please Scan Your Staff Card",
     "Cloth Enquiry": "Cloth Enquiry",
+    "Name:":"Name: ",
+    "Staff ID:": "Staff ID: ",
     "No Record": "No Record",
 
     "Service Provider": "Service Provider",
     "Please Select the Order Number": "Please Select the Order Number",
-    "Scan": "Scan",
+    "Next": "Next",
     "Start": "Start",
     "Stop": "Stop",
     "Reset": "Reset",
@@ -34,7 +36,8 @@
     "Laundry": "Laundry",
     "Stock": "Stock",
     "In use": "In use",
-    "Total:": "Total: ",
+    "Total Order Qty:": "Total Order Qty: ",
+    "Total Scan Qty:": "Total Scan Qty: ",
 
     "Loading...": "Loading...",
     "Scanning...": "Scanning..."

@@ -4,7 +4,6 @@ import 'package:chewie/chewie.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:rfidgateway/clothIcon.dart';
 import 'package:video_player/video_player.dart';
 
 import '../calendar/dayPickerForHome.dart' as dph;
@@ -129,7 +128,8 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               stockPercent.toStringAsFixed(1) + "%",
                               style: TextStyle(
-                                  color: Colors.red[200],
+                                  color: Colors.green[700],
+                                  // Colors.red[200],
                                   fontSize: 15 * screenRadio),
                             ),
                           ),
@@ -141,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               loanPercent.toStringAsFixed(1) + "%",
                               style: TextStyle(
-                                  color: Colors.purple[200],
+                                  color: Colors.indigo,
+                                  // Colors.purple[200],
                                   fontSize: 15 * screenRadio),
                             ),
                           ),
@@ -171,13 +172,15 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           flex: stockPercent.floor(),
                           child: Container(
-                            color: Colors.red[100],
+                            color: Colors.green[400],
+                            // Colors.red[100],
                           ),
                         ),
                         Expanded(
                           flex: loanPercent.floor(),
                           child: Container(
-                            color: Colors.purple[100],
+                            color: Colors.indigo[300],
+                            // Colors.purple[100],
                           ),
                         ),
                         Expanded(
@@ -202,9 +205,11 @@ class _HomePageState extends State<HomePage> {
       if (status == "Laundry")
         txColor = Colors.cyan[300];
       else if (status == "Loan")
-        txColor = Colors.purple[200];
+        txColor = Colors.indigo;
+      // Colors.purple[200];
       else
-        txColor = Colors.red[200];
+        txColor = Colors.green[700];
+      // Colors.red[200];
       return Container(
         child: Column(
           children: [
@@ -214,6 +219,14 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 10.0,
+                    spreadRadius: 2.0,
+                  )
+                ],
                 color: Colors.white,
               ),
               child: Text(
@@ -233,8 +246,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     Container _eventCardBuilder(Event e) {
-      String date = formatDate(e.date, [mm, "-", dd]);
-      String time = formatDate(e.date, [HH, ':', nn]);
+      // String date = formatDate(e.date, [mm, "-", dd]);
+      // String time = formatDate(e.date, [HH, ':', nn]);
       Color bgColor;
       Color txColor;
       if ((e.date.day == DateTime.now().day) &&
@@ -264,7 +277,8 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  date,
+                  "Laundry",
+                  // date,
                   style: TextStyle(color: txColor, fontSize: 12 * screenRadio),
                 ),
                 Row(
@@ -277,17 +291,22 @@ class _HomePageState extends State<HomePage> {
                         size: 10 * screenRadio,
                       ),
                     ),
-                    Text(
-                      e.dis,
-                      style:
-                          TextStyle(color: txColor, fontSize: 8 * screenRadio),
+                    Container(
+                      width: width * 0.07,
+                      child: Text(
+                        e.dis,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: txColor, fontSize: 8 * screenRadio),
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
             Text(
-              time,
+              e.qty.toString(),
+              // time,
               style: TextStyle(color: txColor, fontSize: 20 * screenRadio),
             ),
           ],
@@ -321,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                       height: height * 0.4,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).cardColor,
                       ),
                       padding: EdgeInsets.all(10 * screenRadio),
                       child: playerVideo,
@@ -530,6 +549,13 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 '/service_provider',
                               );
+                              // Navigator.push(
+                              //   context,
+                              //   new MaterialPageRoute(
+                              //     builder: (context) =>
+                              //         ServiceProviderGridPage(),
+                              //   ),
+                              // );
                             },
                           ),
                         ],
@@ -547,11 +573,14 @@ class _HomePageState extends State<HomePage> {
 }
 
 final List<Event> events = [
-  Event(DateTime.now(), "Today event"),
-  Event(DateTime.now().subtract(Duration(days: 3)), "Ev1"),
-  Event(DateTime.now().subtract(Duration(days: 13)), "Ev2"),
-  Event(DateTime.now().subtract(Duration(days: 30)), "Ev3"),
-  Event(DateTime.now().add(Duration(days: 3)), "Ev4"),
-  Event(DateTime.now().add(Duration(days: 13)), "Ev5"),
-  Event(DateTime.now().add(Duration(days: 30)), "Ev6"),
+  Event(DateTime.now().subtract(Duration(days: 3)), "Order TXO19-00009 begin",
+      15),
+  Event(DateTime.now().subtract(Duration(days: 13)), "Order TXO19-00010 begin",
+      26),
+  Event(DateTime.now().subtract(Duration(days: 30)), "Order TXO19-00011 begin",
+      33),
+  Event(DateTime.now(), "Order TXO19-00009 end", 4),
+  Event(DateTime.now().add(Duration(days: 3)), "Order TXO19-00012 begin", 58),
+  Event(DateTime.now().add(Duration(days: 13)), "Order TXO19-00010 begin", 62),
+  Event(DateTime.now().add(Duration(days: 30)), "Order TXO19-00011 begin", 74),
 ];

@@ -64,6 +64,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
+              width: width * 0.08,
               alignment: Alignment.center,
               child: Icon(
                 cloth,
@@ -74,7 +75,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
             Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     '${Translations.of(context).text("Loan")}' +
@@ -106,7 +107,7 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
     }
 
     Container _eventBoardBuilder() {
-      String time = formatDate(event.date, [HH, ':', nn]);
+      // String time = formatDate(event.date, [HH, ':', nn]);
       Color bgColor;
       Color txColor;
       if ((event.date.day == DateTime.now().day) &&
@@ -122,10 +123,10 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
         txColor = Colors.cyan[300];
       }
       return Container(
-        width: width * 0.65,
+        width: width * 0.2,
         height: height * 0.28,
         alignment: Alignment.center,
-        padding: EdgeInsets.all(20 * screenRadio),
+        padding: EdgeInsets.all(10 * screenRadio),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: bgColor,
@@ -137,31 +138,35 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  date,
-                  style: TextStyle(color: txColor, fontSize: 40 * screenRadio),
+                  "Laundry",
+                  style: TextStyle(color: txColor, fontSize: 30 * screenRadio),
                 ),
                 Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(right: 15 * screenRadio),
+                      margin: EdgeInsets.only(right: 10 * screenRadio),
                       child: Icon(
                         Icons.attachment,
                         color: txColor,
-                        size: 40 * screenRadio,
+                        size: 30 * screenRadio,
                       ),
                     ),
-                    Text(
-                      event.dis,
-                      style:
-                          TextStyle(color: txColor, fontSize: 20 * screenRadio),
+                    Container(
+                      width: width * 0.14,
+                      child: Text(
+                        event.dis,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: txColor, fontSize: 15 * screenRadio),
+                      ),
                     ),
                   ],
                 ),
+                Text(
+                  event.qty.toString(),
+                  style: TextStyle(color: txColor, fontSize: 40 * screenRadio),
+                ),
               ],
-            ),
-            Text(
-              time,
-              style: TextStyle(color: txColor, fontSize: 80 * screenRadio),
             ),
           ],
         ),
@@ -239,24 +244,126 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
                         },
                       ),
                     ),
-                    isEventDate
-                        ? _eventBoardBuilder()
-                        : Container(
-                            width: width * 0.65,
+                    Container(
+                      width: width * 0.65,
+                      height: height * 0.28,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: width * 0.42,
                             height: height * 0.28,
-                            alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Theme.of(context).accentColor,
                             ),
-                            child: Text(
-                              '${Translations.of(context).text("No Record")}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 40 * screenRadio,
-                              ),
+                            child: Stack(
+                              children: [
+                                Opacity(
+                                  opacity: 0.7,
+                                  child: Container(
+                                    alignment: Alignment.centerRight,
+                                    padding:
+                                        EdgeInsets.only(right: width * 0.02),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                      size: 150 * screenRadio,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: width * 0.02),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${Translations.of(context).text("Name:")}',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 30 * screenRadio),
+                                      ),
+                                      Text(
+                                        "XXXXX",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 20 * screenRadio),
+                                      ),
+                                      Text(
+                                        '${Translations.of(context).text("Staff ID:")}',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 30 * screenRadio),
+                                      ),
+                                      Text(
+                                        "XXXXXXXXXXX",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 20 * screenRadio),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          isEventDate
+                              ? _eventBoardBuilder()
+                              : Container(
+                                  width: width * 0.2,
+                                  height: height * 0.28,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Theme.of(context).accentColor,
+                                  ),
+                                  child: Text(
+                                    '${Translations.of(context).text("No Record")}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30 * screenRadio,
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                    // isEventDate
+                    //     ? _eventBoardBuilder()
+                    //     : Container(
+                    //         width: width * 0.65,
+                    //         height: height * 0.28,
+                    //         child: Row(
+                    //           children: [
+                    //             Container(
+                    //               width: width * 0.3,
+                    //               height: height * 0.28,
+                    //             ),
+                    //             Container(
+                    //               width: width * 0.3,
+                    //               height: height * 0.28,
+                    //               alignment: Alignment.center,
+                    //               decoration: BoxDecoration(
+                    //                 borderRadius: BorderRadius.circular(10),
+                    //                 color: Theme.of(context).accentColor,
+                    //               ),
+                    //               child: Text(
+                    //                 '${Translations.of(context).text("No Record")}',
+                    //                 style: TextStyle(
+                    //                   color: Colors.white,
+                    //                   fontSize: 30 * screenRadio,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
                   ],
                 ),
                 Container(
@@ -281,13 +388,16 @@ class _ClothEnquiryPageState extends State<ClothEnquiryPage> {
 }
 
 final List<Event> events = [
-  Event(DateTime.now(), "Today event"),
-  Event(DateTime.now().subtract(Duration(days: 3)), "Ev1"),
-  Event(DateTime.now().subtract(Duration(days: 13)), "Ev2"),
-  Event(DateTime.now().subtract(Duration(days: 30)), "Ev3"),
-  Event(DateTime.now().add(Duration(days: 3)), "Ev4"),
-  Event(DateTime.now().add(Duration(days: 13)), "Ev5"),
-  Event(DateTime.now().add(Duration(days: 30)), "Ev6"),
+  Event(DateTime.now().subtract(Duration(days: 3)), "Order TXO19-00009 begin",
+      15),
+  Event(DateTime.now().subtract(Duration(days: 13)), "Order TXO19-00010 begin",
+      26),
+  Event(DateTime.now().subtract(Duration(days: 30)), "Order TXO19-00011 begin",
+      33),
+  Event(DateTime.now(), "Order TXO19-00009 end", 4),
+  Event(DateTime.now().add(Duration(days: 3)), "Order TXO19-00012 begin", 58),
+  Event(DateTime.now().add(Duration(days: 13)), "Order TXO19-00010 begin", 62),
+  Event(DateTime.now().add(Duration(days: 30)), "Order TXO19-00011 begin", 74),
 ];
 
 List<DateTime> eventsDates =

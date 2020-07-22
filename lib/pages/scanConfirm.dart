@@ -465,11 +465,23 @@ class _ScanConfirmPageState extends State<ScanConfirmPage> {
                   Container(
                     width: width * 0.2,
                     height: height * 0.1,
-                    child: Text(
-                      '${Translations.of(context).text("Total:")}${scannedEpcs.length.toString()}',
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 30 * screenRadio),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${Translations.of(context).text("Total Order Qty:")}${orderedCloths.length.toString()}',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 15 * screenRadio),
+                        ),
+                        Text(
+                          '${Translations.of(context).text("Total Scan Qty:")}${scannedEpcs.length.toString()}',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 15 * screenRadio),
+                        ),
+                      ],
                     ),
                   ),
                   FlatButton(

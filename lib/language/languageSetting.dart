@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'translation/application.dart';
-import 'translation/localization.dart';
 
 List<String> languages = ["EN", "简", "繁"];
 
